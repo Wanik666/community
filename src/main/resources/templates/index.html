@@ -28,17 +28,16 @@
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="https://github.com/login/oauth/authorize?client_id=b5bf62ea34e5a9ba7cf5
-                    &redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a>
+                <li th:if="${session.user==null}">
+                    <a href="/login">登录</a>
                 </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">我 <span class="caret"></span></a>
+                <li class="dropdown" th:if="${session.user!=null}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:text="${session.user.name}"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">消息中心</a></li>
                         <li><a href="#">基础设置</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">退出登录</a></li>
+                        <li><a href="/logout">退出登录</a></li>
                     </ul>
                 </li>
             </ul>

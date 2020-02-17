@@ -1,4 +1,4 @@
-package wang.kingweb.community.entity;
+package wang.kingweb.community.dto;
 
 public class AccessTokenParam {
     private String client_id;

@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- 踩过的坑，springboot引入静态资源路径不要加/static/，否则会报404-->
+    <title>登录</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
+    <!-- github小图标 -->
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_vuk2epwoyqo.css">
+    <!-- login页面样式 -->
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap-theme.min.css">
+    <script src="/jquery-1.12.4/jquery-1.12.4.min.js"></script>
+    <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="panel panel-login">
+    <div class="login-form">
+
+    </div>
+    <div class="login-other">
+        <h5>第三方账号登录</h5>
+        <a href="https://github.com/login/oauth/authorize?client_id=b5bf62ea34e5a9ba7cf5&redirect_uri=http://localhost:8080/callback&scope=user&state=1" class="btn btn-primary btn-block btn-github" role="button">
+            <i class="iconfont icon-GitHub">  </i>
+            GitHub 登录
+        </a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package wang.kingweb.community.entity;
+package wang.kingweb.community.dto;
 
 public class GitHubUser {
     private Long id;

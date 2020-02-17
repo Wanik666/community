@@ -1,0 +1,28 @@
+body{
+    background-color: #cccccc;
+}
+.panel-login{
+    width: 600px;
+    height: 400px;
+    padding: 50px 30px;
+    margin: 120px auto;
+    text-align: center;
+}
+.login-form{
+    width: 340px;
+    height: 100%;
+    padding: 20px auto;
+    border-right: 1px solid #ccc;
+    float: left;
+}
+.login-other{
+    width: 149px;
+    float: left;
+    margin: 50px 0 50px 40px;
+}
+.login-other h5{
+    margin: 20px;
+}
+.btn-github{
+
+}
