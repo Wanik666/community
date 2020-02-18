@@ -57,4 +57,16 @@ public class User {
     public void setModifiedTime(Long modifiedTime) {
         this.modifiedTime = modifiedTime;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", accountId=" + accountId +
+                ", token='" + token + '\'' +
+                ", createTime=" + createTime +
+                ", modifiedTime=" + modifiedTime +
+                '}';
+    }
 }

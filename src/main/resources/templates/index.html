@@ -5,6 +5,7 @@
     <title>个人博客</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_gzmbgp6rv1a.css">
     <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap-theme.min.css">
     <script src="/jquery-1.12.4/jquery-1.12.4.min.js"></script>
     <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -28,6 +29,9 @@
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
+                <li th:if="${session.user!=null}">
+                    <a href="/publish"><i class="iconfont icon-fabu2"></i>&nbsp;&nbsp;写文章</a>
+                </li>
                 <li th:if="${session.user==null}">
                     <a href="/login">登录</a>
                 </li>

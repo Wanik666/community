@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- 踩过的坑，springboot引入静态资源路径不要加/static/，否则会报404-->
+    <title>发布文章</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_gzmbgp6rv1a.css">
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap-theme.min.css">
+    <script src="/jquery-1.12.4/jquery-1.12.4.min.js"></script>
+    <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!--顶部导航栏-->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">个人博客</span>
+            </button>
+            <a class="navbar-brand" href="#">个人博客</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <form class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="请搜索问题">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li th:if="${session.user!=null}">
+                    <a href="/publish"><i class="iconfont icon-fabu2"></i>&nbsp;&nbsp;写文章</a>
+                </li>
+                <li th:if="${session.user==null}">
+                    <a href="/login">登录</a>
+                </li>
+                <li class="dropdown" th:if="${session.user!=null}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false" th:text="${session.user.name}"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">消息中心</a></li>
+                        <li><a href="#">基础设置</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/logout">退出登录</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- 问题发布栏 -->
+<div class="row main">
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"><h4><i class="iconfont icon-fabu"></i>&nbsp;发起</h4></div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-9 alertMsg">
+                <div class="alert alert-danger alert-dismissible alert-error" role="alert" th:if="${error != null}">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <span th:text="${error}"></span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3"></div>
+        </div>
+
+
+        <hr>
+        <form action="/publish" method="post">
+            <div class="form-group">
+                <label for="title">文章标题:</label>
+                <input type="text" class="form-control" th:value="${title}" id="title" name="title" placeholder="填写标题......">
+            </div>
+            <div class="form-group">
+                <label for="description">文章内容(请参考右侧提示填写):</label>
+                <textarea id="description" name="description" th:text="${description}" class="form-control" rows="12" cols="10"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="tag">标签:</label>
+                <input type="text" class="form-control" id="tag" th:value="${tag}" name="tag" placeholder="请填写标签......">
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success btn-publish">发布</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <h4>文章发布要求：</h4>
+        <ul>
+            <li>文章标题：请用精简的语言描述您发布的问题，不超过25字</li>
+            <li>文章内容：填写文章具体描述的内容</li>
+            <li>标签：填写一个或多个合适标签，每个不超过10个字</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

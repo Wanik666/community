@@ -1,0 +1,23 @@
+body{
+    background-color: #ccc;
+}
+
+.main{
+    margin: 20px 30px;
+    padding: 20px;
+    border-radius: 3px;
+    background-color: white;
+}
+
+.btn-publish{
+    float: right;
+}
+.alertMsg{
+    display: flex;
+    justify-content:center;
+    flex-direction: row;
+}
+.alert-error{
+    padding: 8px 22px  !important;
+    margin-bottom: 0 !important;
+}
