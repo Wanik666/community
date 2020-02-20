@@ -21,3 +21,15 @@ body{
     padding: 8px 22px  !important;
     margin-bottom: 0 !important;
 }
+.media-object{
+    width: 42px;
+    height: 42px;
+}
+.media_list{
+    padding-top: 10px;
+    border-top:1px solid #f5f5f5;
+}
+
+.col-left{
+    border-right:1px solid #f5f5f5;
+}

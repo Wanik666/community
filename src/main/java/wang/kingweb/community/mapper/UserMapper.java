@@ -9,11 +9,11 @@ public interface UserMapper {
     @Select("select * from user where account_id = #{accountId}")
     User selectUserByAccountId(@Param("accountId") Long accountId);
 
-    @Insert("insert into user (account_id,name,token,create_time,modified_time) values (#{accountId},#{" +
-            "name},#{token},#{createTime},#{modifiedTime})")
+    @Insert("insert into user (account_id,name,token,create_time,modified_time,avatar_url) values (#{accountId},#{" +
+            "name},#{token},#{createTime},#{modifiedTime},#{avatarUrl})")
     void addUser(User user);
 
-    @Update("update user set token = #{token},name = #{name},modified_time = #{modifiedTime} where id = #{id}")
+    @Update("update user set token = #{token},name = #{name},modified_time = #{modifiedTime},avatar_url=#{avatarUrl} where id = #{id}")
     void updateUser(User user);
 
     @Select("select * from user where token = #{token}")

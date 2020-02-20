@@ -1,6 +1,7 @@
 package wang.kingweb.community.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +22,13 @@ public class AuthorizationController {
     @Autowired
     UserMapper userMapper;
 
+    @Value("${github.client.id}")
+    private String client_id;
+    @Value("${github.client.secret}")
+    private String client_secret;
+    @Value("${github.redirect.url}")
+    private String redirect_url;
+
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
@@ -29,9 +37,9 @@ public class AuthorizationController {
         AccessTokenParam accessTokenParam = new AccessTokenParam();
         accessTokenParam.setCode(code);
         accessTokenParam.setState(state);
-        accessTokenParam.setClient_id("b5bf62ea34e5a9ba7cf5");
-        accessTokenParam.setClient_secret("0b08019a841e39355d6fe070209e7f60ac2bce18");
-        accessTokenParam.setRedirect_uri("http://localhost:8080/callback");
+        accessTokenParam.setClient_id(client_id);
+        accessTokenParam.setClient_secret(client_secret);
+        accessTokenParam.setRedirect_uri(redirect_url);
         String Token = gitHubProvider.getAccessToken(accessTokenParam);   //获取到access_token
         String accessToken = Token.split("&")[0].split("=")[1];
         //使用access_token获取用户信息
@@ -43,8 +51,13 @@ public class AuthorizationController {
 
             //如果存在更新token,用户名及修改时间
             if(selectUser!=null){
-                if(gitHubUser.getName()!=null&&selectUser.getName()!=null&&!gitHubUser.getName().equals(selectUser.getName())){
+                if(gitHubUser.getName()==null||gitHubUser.getName()==""){
+                    selectUser.setName("gid_"+gitHubUser.getId());
+                }else if(gitHubUser.getName()!=null&&selectUser.getName()!=null&&!gitHubUser.getName().equals(selectUser.getName())){
                     selectUser.setName(gitHubUser.getName());
+                }
+                if(!gitHubUser.getAvatarUrl().equals(selectUser.getAvatarUrl())){
+                    selectUser.setAvatarUrl(gitHubUser.getAvatarUrl());
                 }
                 selectUser.setToken(token);
                 selectUser.setModifiedTime(System.currentTimeMillis());
@@ -55,14 +68,15 @@ public class AuthorizationController {
                 user.setName(gitHubUser.getName());
                 user.setAccountId(gitHubUser.getId());
                 user.setToken(token);
+                user.setAvatarUrl(gitHubUser.getAvatarUrl());
                 user.setCreateTime(System.currentTimeMillis());
                 user.setModifiedTime(user.getCreateTime());
+
 
                 userMapper.addUser(user);
             }
             response.addCookie(new Cookie("token",token));
         }
-        System.out.println(gitHubUser.getName());
         return "redirect:/";
     }
 }

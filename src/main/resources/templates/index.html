@@ -5,7 +5,8 @@
     <title>个人博客</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_gzmbgp6rv1a.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_rm1fqucxtan.css">
     <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap-theme.min.css">
     <script src="/jquery-1.12.4/jquery-1.12.4.min.js"></script>
     <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
@@ -18,7 +19,7 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">个人博客</span>
             </button>
-            <a class="navbar-brand" href="#">个人博客</a>
+            <a class="navbar-brand" href="/">个人博客</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -48,5 +49,35 @@
         </div>
     </div>
 </nav>
+
+<div class="row main">
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 col-left">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"><h4><i class="iconfont icon-liebiao"></i>&nbsp;列表</h4></div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-9 alertMsg">
+                <div class="alert alert-danger alert-dismissible alert-error" role="alert" th:if="${error != null}">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <span th:text="${error}"></span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3"></div>
+        </div>
+        <div class="media media_list" th:each="article : ${articleList}">
+            <div class="media-left">
+                <a href="#">
+                    <img class="media-object img-rounded" th:src="${article.user.getAvatarUrl()}"  >
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading" th:text="${article.title}">标题标题</h4>
+                <span th:text="${article.answerCount}"></span> 个回复 • <span th:text="${article.readCount}"></span> 次浏览 • 发布时间<span th:text="${#dates.format(article.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <h4>热门话题、广告栏、热门标签栏等</h4>
+    </div>
+</div>
 </body>
 </html>
