@@ -20,17 +20,21 @@ public class PaginationDTO {
     //具体计算分页数据类，并设置值
     public void setPagination(int page, int size, int totalCount) {
         this.page = page;
+
         //计算总页数
         if(totalCount%size==0){
             countPage = totalCount/size;
         }else{
             countPage = totalCount/size +1;
         }
+        if(totalCount==0){
+            countPage = 0;
+        }
 
         //限制页码范围，防止用户输入导致越界
-        if(page<1){
+        if(page<1||countPage==0){
             page = 1;
-        }else if (page>countPage){
+        } else if (page>countPage){
             page = countPage;
         }
 

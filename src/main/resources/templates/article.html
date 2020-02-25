@@ -18,16 +18,9 @@
 <div class="row main">
     <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 col-left">
         <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"><h4><i class="iconfont icon-liebiao"></i>&nbsp;列表</h4></div>
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-9 alertMsg">
-                <div class="alert alert-danger alert-dismissible alert-error" role="alert" th:if="${error != null}">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <span th:text="${error}"></span>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-3"></div>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"><h4><i class="iconfont icon-liebiao"></i>&nbsp;我的文章</h4></div>
         </div>
-        <div class="media media_list" th:each="article : ${articleList}">
+        <div class="media media_list" th:each="article : ${myArticleList}">
             <div class="media-left">
                 <a href="#">
                     <img class="media-object img-rounded" th:src="${article.user.getAvatarUrl()}"  >
@@ -41,10 +34,13 @@
 
         <!-- 分页 -->
         <div th:replace="pagination :: page"></div>
-
     </div>
     <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-        <h4>热门话题、广告栏、热门标签栏等</h4>
+        <div class="list-group">
+            <a href="/main/personal" th:class="${selection=='personal'?'active list-group-item':'list-group-item'} ">个人中心</a>
+            <a href="/main/article" th:class="${selection=='article'?'active list-group-item':'list-group-item'} ">我的文章</a>
+            <a href="/main/message" th:class="${selection=='message'?'active list-group-item':'list-group-item'} ">我的消息<span class="badge">4</span></a>
+        </div>
     </div>
 </div>
 </body>

@@ -18,9 +18,15 @@ public class PublishController {
     ArticleMapper articleMapper;
 
     @GetMapping("/publish")
-    public String publish(){
+    public String publish(HttpServletRequest request){
 
+        //检查用户是否登录
+        User user = (User) request.getSession().getAttribute("user");
+        if(user==null){
+            return "redirect:/";
+        }
         return "publish";
+
     }
 
     @PostMapping("/publish")
@@ -28,12 +34,14 @@ public class PublishController {
                             @RequestParam(name = "description") String description,
                             @RequestParam(name = "tag") String tag,
                             HttpServletRequest request, Model model){
+
         //检查用户是否登录
         User user = (User) request.getSession().getAttribute("user");
         if(user==null){
             model.addAttribute("error","暂未登录，请登录后重试！");
             return "publish";
         }
+
         //用于数据回显
         model.addAttribute("title",title);
         model.addAttribute("description",description);

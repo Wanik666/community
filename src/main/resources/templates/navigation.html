@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="nav">
+    <!--顶部导航栏-->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">个人博客</span>
+                </button>
+                <a class="navbar-brand" href="/">个人博客</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="请搜索问题">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li th:if="${session.user!=null}">
+                        <a href="/publish"><i class="iconfont icon-fabu2"></i>&nbsp;&nbsp;写文章</a>
+                    </li>
+                    <li th:if="${session.user==null}">
+                        <a href="/login">登录</a>
+                    </li>
+                    <li class="dropdown" th:if="${session.user!=null}">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span th:text="${session.user.name}"></span><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/main/personal">个人中心</a></li>
+                            <li><a href="/main/article">我的文章</a></li>
+                            <li><a href="/main/message">我的消息</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/logout">退出登录</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+</body>
+</html>

@@ -33,3 +33,13 @@ body{
 .col-left{
     border-right:1px solid #f5f5f5;
 }
+
+.noArticle{
+    font-size: 15px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.page-right{
+    text-align: right;
+}

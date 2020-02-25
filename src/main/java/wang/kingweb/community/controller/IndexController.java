@@ -34,26 +34,16 @@ public class IndexController {
     public String index(HttpServletRequest request, Model model,
                         @RequestParam(value = "page",defaultValue = "1") int page,
                         @RequestParam(value = "size",defaultValue = "5") int size){
-        Cookie[] cookies = request.getCookies();
-        if(cookies!=null && cookies.length>0){
-            for (Cookie cookie:cookies){
-                if("token".equals(cookie.getName())){
-                    String token = cookie.getValue();
-                    User user =  userMapper.selectUserByToken(token);
-                    if(user!=null){
-                        request.getSession().setAttribute("user",user);
-                    }
-                }
-            }
-        }
-        int totalCount = articleMapper.count();
+
+
+        int totalCount = articleMapper.count(null);
         PaginationDTO paginationDTO =  paginationService.getPageInfo(page,size,totalCount);
 
         model.addAttribute("paginationInfo",paginationDTO);
 
 
         //文章列表展示
-        List<Article> articleList = articleMapper.list(paginationDTO.getOffset(),size);
+        List<Article> articleList = articleMapper.list(null,paginationDTO.getOffset(),size);
         model.addAttribute("articleList",articleList);
         return "index";
     }
