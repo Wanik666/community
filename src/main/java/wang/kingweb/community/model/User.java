@@ -1,17 +1,22 @@
-package wang.kingweb.community.entity;
+package wang.kingweb.community.model;
 
 import lombok.Data;
 
 @Data
 public class User {
-    private Long id;
-    private String name;
-    //第三方登录id
+    private Integer id;
+
     private Long accountId;
-    //验证token
+
+    private String name;
+
     private String token;
+
     private Long createTime;
+
     private Long modifiedTime;
+
     private String avatarUrl;
+
 
 }

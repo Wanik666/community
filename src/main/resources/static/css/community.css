@@ -1,7 +1,13 @@
 body{
     background-color: #ccc;
 }
-
+a{
+    color: #155faa;
+}
+a:hover{
+    color: #499ef3;
+    text-decoration: none;
+}
 .main{
     margin: 20px 30px;
     padding: 20px;
@@ -42,4 +48,18 @@ body{
 
 .page-right{
     text-align: right;
+}
+
+.detail-msg{
+    font-size: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #f5f5f5;
+}
+.jumbotron{
+    padding: 50px 60px;
+}
+.link-items{
+    display: inline-block;
+    float: right;
+
 }

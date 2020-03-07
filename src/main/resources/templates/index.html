@@ -34,7 +34,7 @@
                 </a>
             </div>
             <div class="media-body">
-                <h4 class="media-heading" th:text="${article.title}">标题标题</h4>
+                <a th:href="@{/article/detail/{id}(id=${article.getId()})}"><h4 class="media-heading" th:text="${article.title}">标题标题</h4></a>
                 <span th:text="${article.answerCount}"></span> 个回复 • <span th:text="${article.readCount}"></span> 次浏览 • 发布时间<span th:text="${#dates.format(article.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
             </div>
         </div>

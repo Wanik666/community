@@ -1,4 +1,14 @@
 ### 个人博客
+##### 2020-02-28 v2.5
+    使用mybatis generator 重构持久层代码
+    
+```
+标准不覆盖
+mvn mybatis-generator:generate
+会覆盖原有文件
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+```
+
 ##### 2020-02-25 v2.4
     部分代码重构，添加拦截器验证session,当前用户所写博客页面展示实现
 

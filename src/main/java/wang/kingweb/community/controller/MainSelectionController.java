@@ -1,5 +1,6 @@
 package wang.kingweb.community.controller;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,8 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import wang.kingweb.community.dto.PaginationDTO;
-import wang.kingweb.community.entity.Article;
-import wang.kingweb.community.entity.User;
+import wang.kingweb.community.mapper.UserMapper;
+import wang.kingweb.community.model.Article;
+import wang.kingweb.community.model.ArticleExample;
+import wang.kingweb.community.model.User;
 import wang.kingweb.community.mapper.ArticleMapper;
 import wang.kingweb.community.service.PaginationService;
 
@@ -35,13 +38,16 @@ public class MainSelectionController {
         if(user==null){
             return "redirect:/";
         }
-        int totalCount = articleMapper.count(user.getId());
-        PaginationDTO paginationDTO =  paginationService.getPageInfo(page,size,totalCount);
+        ArticleExample articleExample = new ArticleExample();
+        articleExample.createCriteria().andAuthorIdEqualTo(user.getId().longValue());
+        long totalCount = articleMapper.countByExample(articleExample);
+
+        PaginationDTO paginationDTO =  paginationService.getPageInfo(page,size,(int)totalCount);
         model.addAttribute("paginationInfo",paginationDTO);
         switch (selection){
             case "article":
-                //修改articleMapper中的list列表方法，我们这里传入用户id,如果id为空则表示查询所有，如果id不为空，则查询当前id的用户信息
-                List<Article> myArticleList = articleMapper.list(user.getId(), paginationDTO.getOffset(), size);
+                //查询当前用户的所有文章
+                List<Article> myArticleList = articleMapper.selectArticleWithUser(user.getId(),paginationDTO.getOffset(), size);
 
                 model.addAttribute("myArticleList",myArticleList);
                 //用于判断当前的操作

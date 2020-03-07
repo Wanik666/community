@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- 踩过的坑，springboot引入静态资源路径不要加/static/，否则会报404-->
+    <title>出错了</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_rm1fqucxtan.css">
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap-theme.min.css">
+    <script src="/jquery-1.12.4/jquery-1.12.4.min.js"></script>
+    <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div th:replace="navigation :: nav"></div>
+
+<div class="jumbotron">
+    <h1>哎呀,出错了！</h1>
+    <h3 th:text="${errorMsg}"></h3>
+    <p><a class="btn btn-primary btn-lg" href="/" role="button">回到首页</a></p>
+</div>
+</body>
+</html>

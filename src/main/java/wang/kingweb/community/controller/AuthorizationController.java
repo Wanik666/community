@@ -7,20 +7,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import wang.kingweb.community.dto.AccessTokenParam;
 import wang.kingweb.community.dto.GitHubUser;
-import wang.kingweb.community.entity.User;
-import wang.kingweb.community.mapper.UserMapper;
 import wang.kingweb.community.provider.GitHubProvider;
+import wang.kingweb.community.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
 
 @Controller
 public class AuthorizationController {
     @Autowired
     GitHubProvider gitHubProvider;
+
     @Autowired
-    UserMapper userMapper;
+    UserService userService;
+
 
     @Value("${github.client.id}")
     private String client_id;
@@ -45,37 +45,11 @@ public class AuthorizationController {
         //使用access_token获取用户信息
         GitHubUser gitHubUser = gitHubProvider.getGitHubUser(accessToken);
         if(gitHubUser!=null){
-            String token = UUID.randomUUID().toString();
-            //根据accountid查询是否存在该用户
-            User selectUser =  userMapper.selectUserByAccountId(gitHubUser.getId());
-
-            //如果存在更新token,用户名及修改时间
-            if(selectUser!=null){
-                if(gitHubUser.getName()==null||gitHubUser.getName()==""){
-                    selectUser.setName("gid_"+gitHubUser.getId());
-                }else if(gitHubUser.getName()!=null&&selectUser.getName()!=null&&!gitHubUser.getName().equals(selectUser.getName())){
-                    selectUser.setName(gitHubUser.getName());
-                }
-                if(!gitHubUser.getAvatarUrl().equals(selectUser.getAvatarUrl())){
-                    selectUser.setAvatarUrl(gitHubUser.getAvatarUrl());
-                }
-                selectUser.setToken(token);
-                selectUser.setModifiedTime(System.currentTimeMillis());
-                userMapper.updateUser(selectUser);
-            }else{
-                //如果不存在添加新的用户信息
-                User user = new User();
-                user.setName(gitHubUser.getName());
-                user.setAccountId(gitHubUser.getId());
-                user.setToken(token);
-                user.setAvatarUrl(gitHubUser.getAvatarUrl());
-                user.setCreateTime(System.currentTimeMillis());
-                user.setModifiedTime(user.getCreateTime());
-
-
-                userMapper.addUser(user);
-            }
-            response.addCookie(new Cookie("token",token));
+            String token = userService.createOrUpdateUser(gitHubUser);
+            Cookie cookie = new Cookie("token", token);
+            //设置cookie生命周期
+            cookie.setMaxAge(60 * 60 * 24 * 30 * 6);
+            response.addCookie(cookie);
         }
         return "redirect:/";
     }

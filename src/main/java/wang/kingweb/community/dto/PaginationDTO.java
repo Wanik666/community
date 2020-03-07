@@ -34,7 +34,8 @@ public class PaginationDTO {
         //限制页码范围，防止用户输入导致越界
         if(page<1||countPage==0){
             page = 1;
-        } else if (page>countPage){
+        }
+        else if (page>countPage){
             page = countPage;
         }
 

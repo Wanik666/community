@@ -30,17 +30,20 @@
 
         <hr>
         <form action="/publish" method="post">
+            <div style="display: none">
+                <input type="text" id="id"  name="id"  th:value="${article.id}"/>
+            </div>
             <div class="form-group">
                 <label for="title">文章标题:</label>
-                <input type="text" class="form-control" th:value="${title}" id="title" name="title" placeholder="填写标题......">
+                <input type="text" class="form-control" th:value="${article.title}" id="title" name="title" placeholder="填写标题......">
             </div>
             <div class="form-group">
                 <label for="description">文章内容(请参考右侧提示填写):</label>
-                <textarea id="description" name="description" th:text="${description}" class="form-control" rows="12" cols="10"></textarea>
+                <textarea id="description" name="description" th:text="${article.description}" class="form-control" rows="12" cols="10"></textarea>
             </div>
             <div class="form-group">
                 <label for="tag">标签:</label>
-                <input type="text" class="form-control" id="tag" th:value="${tag}" name="tag" placeholder="请填写标签......">
+                <input type="text" class="form-control" id="tag" th:value="${article.tag}" name="tag" placeholder="请填写标签......">
             </div>
             <div>
                 <button type="submit" class="btn btn-success btn-publish">发布</button>

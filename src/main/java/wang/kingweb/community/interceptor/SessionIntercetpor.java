@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import wang.kingweb.community.entity.User;
+import wang.kingweb.community.model.User;
 import wang.kingweb.community.mapper.UserMapper;
+import wang.kingweb.community.model.UserExample;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Component
 public class SessionIntercetpor implements HandlerInterceptor {
@@ -26,10 +28,15 @@ public class SessionIntercetpor implements HandlerInterceptor {
             for (Cookie cookie:cookies){
                 if("token".equals(cookie.getName())){
                     String token = cookie.getValue();
-                    user =  userMapper.selectUserByToken(token);
-                    if(user!=null){
+
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(token);
+                    List<User> userList = userMapper.selectByExample(userExample);
+                    if(userList.size()>0){
+                        user = userList.get(0);
                         request.getSession().setAttribute("user",user);
                     }
+
                 }
             }
         }

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- 踩过的坑，springboot引入静态资源路径不要加/static/，否则会报404-->
+    <title th:text="${ArticleDetail.title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_rm1fqucxtan.css">
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap-theme.min.css">
+    <script src="/jquery-1.12.4/jquery-1.12.4.min.js"></script>
+    <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div th:replace="navigation :: nav"></div>
+
+<div class="row main">
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 col-left">
+        <div class=""> <h4 th:text="${ArticleDetail.title}"></h4></div>
+        <hr>
+        <div class="detail-msg">
+        作者 <span th:text="${ArticleDetail.user.name}"></span> | 发布时间<span th:text="${#dates.format(ArticleDetail.createTime,'yyyy-MM-dd')}"></span> | 阅读数 <span th:text="${ArticleDetail.readCount}"></span>
+            <div class="link-items" th:if="${ArticleDetail.user.id==session.user.id}" >
+                <a th:href="@{/article/edit(id=${ArticleDetail.getId()})}"><i class="iconfont icon-fabu2"></i>&nbsp;&nbsp;编辑</a>
+            </div>
+        </div>
+        <h4 th:text="${ArticleDetail.description}"></h4>
+    </div>
+    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <div>
+            <p>发起人</p>
+            <div class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-rounded" th:src="${ArticleDetail.user.getAvatarUrl()}"  >
+                    </a>
+                </div>
+                <div class="media-body">
+                    <span class="media-heading" th:text="${ArticleDetail.user.name}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
