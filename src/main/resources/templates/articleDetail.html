@@ -6,10 +6,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/community.css">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_rm1fqucxtan.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_yxz5icboc4.css">
     <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap-theme.min.css">
     <script src="/jquery-1.12.4/jquery-1.12.4.min.js"></script>
     <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/community.js"></script>
+
 </head>
 <body>
 
@@ -17,15 +19,84 @@
 
 <div class="row main">
     <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 col-left">
-        <div class=""> <h4 th:text="${ArticleDetail.title}"></h4></div>
-        <hr>
-        <div class="detail-msg">
-        作者 <span th:text="${ArticleDetail.user.name}"></span> | 发布时间<span th:text="${#dates.format(ArticleDetail.createTime,'yyyy-MM-dd')}"></span> | 阅读数 <span th:text="${ArticleDetail.readCount}"></span>
-            <div class="link-items" th:if="${ArticleDetail.user.id==session.user.id}" >
-                <a th:href="@{/article/edit(id=${ArticleDetail.getId()})}"><i class="iconfont icon-fabu2"></i>&nbsp;&nbsp;编辑</a>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class=""> <h4 th:text="${ArticleDetail.title}"></h4></div>
+            <hr>
+            <div class="detail-msg">
+            作者： <span th:text="${ArticleDetail.user.name}"></span> | 发布时间：<span th:text="${#dates.format(ArticleDetail.createTime,'yyyy-MM-dd')}"></span> | 阅读数： <span th:text="${ArticleDetail.readCount}"></span>
+                <div class="link-items" th:if="${session.user !=null && ArticleDetail.user.id==session.user.id}" >
+                    <a th:href="@{/article/edit(id=${ArticleDetail.getId()})}"><i class="iconfont icon-fabu2"></i>&nbsp;编辑</a>
+                </div>
+            </div>
+            <div>
+                <span th:text="${ArticleDetail.description}"></span>
             </div>
         </div>
-        <h4 th:text="${ArticleDetail.description}"></h4>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="comment">
+                <h4><span th:text="${ArticleDetail.getAnswerCount()}"></span> 个回复</h4>
+            </div>
+
+            <div class="media media_list" th:each="comment :${comments}">
+                <div class="comment-head">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="img-rounded img-comment" th:src="${comment.getUser().getAvatarUrl()}"  >
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <span class="media-heading" th:text="${comment.getUser().getName()}"></span>
+                        <span class="float-right" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd')}"></span>
+                    </div>
+
+                </div>
+                <div class="comment-style comment-body" th:text="${comment.getContent()}">
+
+                </div>
+                <div class="comment-style comment-footer">
+                    <div>
+                        <span class="operate like">
+                        <i class="iconfont icon-z-like" th:like-id="${comment.getId()}" onclick="like(this)"></i>
+                        <span id="likeCount" th:text="${comment.getLikeCount()==0?'':comment.getLikeCount()}"></span>
+                        </span>
+                        <span class="operate answer" th:data-id="${comment.getId()}" onclick="showChildComment(this)">
+                        <i class="iconfont icon-pinglun"></i>
+                        <span id="commentCount" th:text="${comment.commentCount==0?'':comment.commentCount}"></span>
+                        </span>
+                    </div>
+
+                    <div class="collapse childCol col-lg-12 col-md-12 col-sm-12 col-xs-12" th:id="${'comment-'+comment.getId()}">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-comment"   th:if="${session.user!=null}">
+                            <input type="text" class="form-control" id="childComment" name="childComment" placeholder="说说你的看法...">
+                            <button type="button" class="btn btn-success btn-comment" th:data-parentId="${comment.getId()}" onclick="subComment(this)">评论</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- 评论 -->
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+
+            <div class="comment" th:if="${session.user!=null}">
+                <input type="hidden" id="parentId" th:value="${ArticleDetail.getId()}">
+                <div class="d-flex">
+                    <div class="media">
+                        <div class="media-comment">
+                            <a href="#">
+                                <img class="img-rounded img-comment" th:src="${ArticleDetail.user.getAvatarUrl()}"  >
+                            </a>
+                        </div>
+                    </div>
+                    <textarea id="commentArea" name="description"  class="comment-content open" maxlength="1000"></textarea>
+                </div>
+                <button type="button" class="btn btn-success btn-comment" onclick="postComment();">回复</button>
+            </div>
+            <div class="notLogin" th:if="${session.user==null}">
+                要回复问题请先<a onclick="toLogin()">登录</a>
+            </div>
+        </div>
     </div>
     <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
         <div>

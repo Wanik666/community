@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wang.kingweb.community.mapper.ArticleExtMapper">
+  <resultMap id="BaseResultMap" type="wang.kingweb.community.model.Article">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+    <result column="author_id" jdbcType="BIGINT" property="authorId" />
+    <result column="read_count" jdbcType="INTEGER" property="readCount" />
+    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
+    <result column="answer_count" jdbcType="INTEGER" property="answerCount" />
+    <result column="create_time" jdbcType="BIGINT" property="createTime" />
+    <result column="modified_time" jdbcType="BIGINT" property="modifiedTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="wang.kingweb.community.model.Article">
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+  <!-- Article和User联合查询结果 -->
+  <resultMap extends="ResultMapWithBLOBs" id="BaseResultMapAndUser" type="wang.kingweb.community.model.Article">
+    <association javaType="wang.kingweb.community.model.User" property="user">
+      <id column="uid" property="id" />
+      <result column="avatar_url" property="avatarUrl" />
+      <result column="uname" property="name" />
+    </association>
+  </resultMap>
+
+  <!-- 联合查询Article和User -->
+  <select id="selectArticleWithUser" resultMap="BaseResultMapAndUser">
+    select a.*,u.id as uid,u.name as uname,u.avatar_url as avatar_url from article a,user u
+    <where>
+      a.author_id = u.id
+      <if test="uid!=null">
+        and a.author_id = #{uid}
+      </if>
+    </where>
+    order by a.create_time desc
+    limit #{offset},#{size}
+
+  </select>
+  <select id="selectArticleById" resultMap="BaseResultMapAndUser">
+    select a.*,u.id as uid,u.name as uname,u.avatar_url as avatar_url from article a,user u
+    where u.id=a.author_id and a.id = #{id}
+  </select>
+  <update id="incView" parameterType="wang.kingweb.community.model.Article">
+    update article set read_count = read_count + #{readCount} where id = #{id}
+  </update>
+  <update id="incComment" parameterType="wang.kingweb.community.model.Article">
+    update article set answer_count = answer_count + #{answerCount} where id = #{id}
+  </update>
+</mapper>

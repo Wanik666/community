@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wang.kingweb.community.mapper.CommentExtMapper">
+  <resultMap id="BaseResultMap" type="wang.kingweb.community.model.Comment">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="commentor" jdbcType="BIGINT" property="commentor" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="create_time" jdbcType="BIGINT" property="createTime" />
+    <result column="modified_time" jdbcType="BIGINT" property="modifiedTime" />
+  </resultMap>
+  <update id="incSubCommentCount" parameterType="wang.kingweb.community.model.Comment">
+    update comment set comment_count = comment_count+#{commentCount} where id=#{id}
+  </update>
+</mapper>

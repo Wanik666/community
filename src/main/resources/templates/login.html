@@ -6,12 +6,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
     <!-- github小图标 -->
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_rm1fqucxtan.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_yxz5icboc4.css">
     <!-- login页面样式 -->
     <link rel="stylesheet" href="/css/login.css">
     <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap-theme.min.css">
     <script src="/jquery-1.12.4/jquery-1.12.4.min.js"></script>
     <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/community.js"></script>
 </head>
 <body>
 <div class="panel panel-login">
@@ -20,7 +21,7 @@
     </div>
     <div class="login-other">
         <h5>第三方账号登录</h5>
-        <a href="https://github.com/login/oauth/authorize?client_id=b5bf62ea34e5a9ba7cf5&redirect_uri=http://localhost:8080/callback&scope=user&state=1" class="btn btn-primary btn-block btn-github" role="button">
+        <a href="https://github.com/login/oauth/authorize?client_id=b5bf62ea34e5a9ba7cf5&redirect_uri=http://localhost:8080/callback&scope=user&state=1"  class="btn btn-primary btn-block btn-github" onclick="doLogin()" role="button">
             <i class="iconfont icon-GitHub">  </i>
             GitHub 登录
         </a>

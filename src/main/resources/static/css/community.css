@@ -15,7 +15,11 @@ a:hover{
     background-color: white;
 }
 
-.btn-publish{
+.btn-publish {
+    float: right;
+}
+.btn-comment{
+    margin-top: 10px ;
     float: right;
 }
 .alertMsg{
@@ -51,7 +55,9 @@ a:hover{
 }
 
 .detail-msg{
-    font-size: 14px;
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
     padding-bottom: 6px;
     border-bottom: 1px solid #f5f5f5;
 }
@@ -59,7 +65,104 @@ a:hover{
     padding: 50px 60px;
 }
 .link-items{
+    font-size: 15px;
     display: inline-block;
     float: right;
 
 }
+
+.comment-content{
+    display:block;
+    width:100%;
+    padding:7px 8px;
+    background:#fff;
+    border:1px solid #c1c1c1;
+    border-radius:4px;resize:none;height:60px;font-size:14px;line-height:22px;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-transition:height .3s ease-in-out;transition:height .3s ease-in-out
+}
+
+.comment-content{
+    height: 80px;
+}
+.d-flex{
+    display: flex !important;
+}
+.media-comment{
+    margin-top: 1px;
+    margin-right: 8px;
+}
+
+.img-comment{
+    width:30px;
+    height: 30px;
+}
+
+.comment{
+    padding-top: 10px;
+    border-top:1px solid #f5f5f5;
+}
+.notLogin{
+    cursor: pointer;
+    text-align: center;
+}
+.operate{
+    display: inline-block;
+
+    width: 45px;
+    height: 30px;
+    max-width: 50px;
+    max-height: 30px;
+    text-align: center;
+    border: #f5f5f5 solid 1px;
+    border-radius: 4px;
+    padding: 3px 2px;
+    margin: 4px 2px 4px 0;
+    cursor: pointer;
+}
+.operate span{
+    font-size: 12px;
+
+}
+.operate:hover{
+    color: white;
+    cursor: pointer;
+    background-color: #499ef3;
+}
+
+.comment-style{
+    margin-left: 38px;
+}
+
+.comment-body{
+
+}
+.comment-footer{
+
+}
+
+.childCol{
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 10px 0;
+}
+
+.operateBgColor{
+    color: white;
+    background-color: #499ef3;
+}
+
+.comment-detail{
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+.childCol .comment-detail:last-child{
+    border-bottom: none;
+}
+.comment-comment{
+    margin-top: 15px;
+}
+
+.float-right{
+    font-size: 12px;
+    float: right;
+}
+

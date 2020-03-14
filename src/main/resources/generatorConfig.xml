@@ -9,6 +9,11 @@
 
         <!-- mybatis提供的分页插件 -->
         <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+        <!-- 使用自带序列化插件 -->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+
         <!-- 去掉生成文件中的注释 -->
         <commentGenerator>
             <property name="suppressDate" value="true"/>
@@ -39,8 +44,9 @@
         </javaClientGenerator>
 
         <!-- 对应数据库表名以及生成的实体类名 -->
-        <table tableName="user" domainObjectName="User" ></table>
-        <table tableName="article" domainObjectName="Article" ></table>
+        <table  tableName="user" domainObjectName="User" ></table>
+        <table  tableName="article" domainObjectName="Article" ></table>
+        <table  tableName="comment" domainObjectName="Comment" ></table>
 
     </context>
 </generatorConfiguration>

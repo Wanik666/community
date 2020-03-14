@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import wang.kingweb.community.dto.PaginationDTO;
+import wang.kingweb.community.mapper.ArticleExtMapper;
 import wang.kingweb.community.model.Article;
 import wang.kingweb.community.mapper.ArticleMapper;
 import wang.kingweb.community.model.ArticleExample;
@@ -19,6 +20,9 @@ public class IndexController {
 
     @Autowired
     ArticleMapper articleMapper;
+
+    @Autowired
+    ArticleExtMapper articleExtMapper;
 
     @Autowired
     PaginationService paginationService;
@@ -35,7 +39,7 @@ public class IndexController {
 
 
         //文章列表展示
-        List<Article> articleList = articleMapper.selectArticleWithUser(null, paginationDTO.getOffset(), size);
+        List<Article> articleList = articleExtMapper.selectArticleWithUser(null, paginationDTO.getOffset(), size);
         model.addAttribute("articleList",articleList);
         return "index";
     }
