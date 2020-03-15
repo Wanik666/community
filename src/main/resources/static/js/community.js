@@ -68,13 +68,13 @@ function showChildComment(ele) {
 }
 
 function subComment(ele) {
-
-    var subcomment = $("#childComment").val();
+    var parentId = $(ele).attr("data-parentId");
+    var subcomment = $("#childComment-"+parentId).val();
     if(subcomment==undefined||subcomment==null||subcomment==""){
         alert("评论内容不能为空");
         return;
     }
-    var parentId = $(ele).attr("data-parentid");
+
     var data = {"parentId":parentId,"content":subcomment,"type":2};
 
     $.ajax({
@@ -86,11 +86,11 @@ function subComment(ele) {
         success:function (result) {
             if(result.code==200){
                 obj = result.obj;
-                $("#childComment").val("");
+                $("#childComment-"+parentId).val("");
                 var time = new Date().format("yyyy-MM-dd");
                 pushCommentHtml(parentId,obj.avatarUrl,obj.name,subcomment,time);
                 //伪评论数增加
-                var commentCount = $("#commentCount");
+                var commentCount = $("#commentCount-"+parentId);
                 var commentCountVal  = commentCount.text();
                 commentCountVal==''?commentCount.text(1):commentCount.text(parseInt(commentCountVal)+1);
                 alert(result.message);

@@ -61,13 +61,13 @@
                         </span>
                         <span class="operate answer" th:data-id="${comment.getId()}" onclick="showChildComment(this)">
                         <i class="iconfont icon-pinglun"></i>
-                        <span id="commentCount" th:text="${comment.commentCount==0?'':comment.commentCount}"></span>
+                        <span th:id="${'commentCount-'+comment.getId()}"  th:text="${comment.commentCount==0?'':comment.commentCount}"></span>
                         </span>
                     </div>
 
                     <div class="collapse childCol col-lg-12 col-md-12 col-sm-12 col-xs-12" th:id="${'comment-'+comment.getId()}">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment-comment"   th:if="${session.user!=null}">
-                            <input type="text" class="form-control" id="childComment" name="childComment" placeholder="说说你的看法...">
+                            <input type="text" class="form-control" th:id="${'childComment-'+comment.getId()}" name="childComment" placeholder="说说你的看法...">
                             <button type="button" class="btn btn-success btn-comment" th:data-parentId="${comment.getId()}" onclick="subComment(this)">评论</button>
                         </div>
                     </div>

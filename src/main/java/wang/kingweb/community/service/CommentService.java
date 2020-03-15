@@ -38,6 +38,7 @@ public class CommentService {
 
     @Transactional
     public void insert(Comment comment){
+        Long parentId = null;
         Article article1 = articleMapper.selectByPrimaryKey(comment.getParentId());
         if(comment.getType()==null || !CommentType.isExist(comment.getType())){
             throw new CustomizeException(CustomizeErrorCode.COMMENT_TYPE_WRONG);
@@ -48,8 +49,14 @@ public class CommentService {
             if(comment.getParentId()==null || articleMapper.selectByPrimaryKey(comment.getParentId())==null){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_ARTICLE_ID_NOT_FOUND);
             }
-
+            parentId = comment.getParentId();
         }else {
+            Comment parentComment = commentMapper.selectByPrimaryKey(comment.getParentId());
+            if(parentComment!=null){
+                parentId = parentComment.getParentId();
+            }else {
+                throw new CustomizeException(CustomizeErrorCode.COMMENT_ARTICLE_ID_NOT_FOUND);
+            }
             Comment updateComment = new Comment();
             updateComment.setCommentCount(1);
             updateComment.setId(comment.getParentId());
@@ -62,7 +69,7 @@ public class CommentService {
         commentMapper.insert(comment);
         Article article = new Article();
         //评论数递增
-        article.setId(comment.getParentId());
+        article.setId(parentId);
         article.setAnswerCount(1);
         articleExtMapper.incComment(article);
     }
@@ -72,7 +79,7 @@ public class CommentService {
         List<CommentDTO> commentDTOS  = new ArrayList<>();
         /** 查询出当前文章的所有一级评论 **/
         CommentExample commentExample = new CommentExample();
-        commentExample.createCriteria().andParentIdEqualTo(id);
+        commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(type);
         if(type==CommentType.ARTICLE.getType()){
 
             commentExample.setOrderByClause("create_time desc");
