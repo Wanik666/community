@@ -16,7 +16,7 @@
     <result column="description" jdbcType="LONGVARCHAR" property="description" />
   </resultMap>
   <!-- Article和User联合查询结果 -->
-  <resultMap extends="ResultMapWithBLOBs" id="BaseResultMapAndUser" type="wang.kingweb.community.model.Article">
+  <resultMap extends="ResultMapWithBLOBs" id="BaseResultMapAndUser" type="wang.kingweb.community.dto.ArticleDTO">
     <association javaType="wang.kingweb.community.model.User" property="user">
       <id column="uid" property="id" />
       <result column="avatar_url" property="avatarUrl" />
@@ -41,6 +41,24 @@
     select a.*,u.id as uid,u.name as uname,u.avatar_url as avatar_url from article a,user u
     where u.id=a.author_id and a.id = #{id}
   </select>
+  <select id="getAboutArticles" resultMap="BaseResultMap">
+    select id,title from article
+     <where>
+       and id != #{id}
+        <if test="tag !=null">
+
+            <foreach collection="tag.split(',')" item="t" index="index" open="and (" close=")"  separator="or" >
+
+              tag like concat('%',#{t},'%')
+
+            </foreach>
+        </if>
+
+
+     </where>
+
+  </select>
+
   <update id="incView" parameterType="wang.kingweb.community.model.Article">
     update article set read_count = read_count + #{readCount} where id = #{id}
   </update>

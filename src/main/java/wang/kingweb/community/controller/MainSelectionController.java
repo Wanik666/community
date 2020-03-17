@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import wang.kingweb.community.dto.ArticleDTO;
 import wang.kingweb.community.dto.PaginationDTO;
 import wang.kingweb.community.mapper.ArticleExtMapper;
 import wang.kingweb.community.mapper.UserMapper;
@@ -51,7 +52,7 @@ public class MainSelectionController {
         switch (selection){
             case "article":
                 //查询当前用户的所有文章
-                List<Article> myArticleList = articleExtMapper.selectArticleWithUser(user.getId(),paginationDTO.getOffset(), size);
+                List<ArticleDTO> myArticleList = articleExtMapper.selectArticleWithUser(user.getId(),paginationDTO.getOffset(), size);
 
                 model.addAttribute("myArticleList",myArticleList);
                 //用于判断当前的操作

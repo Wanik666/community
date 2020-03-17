@@ -133,6 +133,80 @@ function like(ele){
 
 }
 
+var tagInput = undefined;
+
+$(function() {
+    tagInput = $("input[data-role=tagsinput]");
+    tagInput.tagsinput({
+        maxTags: 5
+    });
+
+    tagInput.on('itemAdded',function (event) {
+        var item = event.item;
+        var _length =  $(this).val().split(",").length
+        if(_length>=5){
+            tagInput.tagsinput("remove",item);
+            alert("已超过最大标签数");
+            return;
+        }
+
+        console.log(item);
+        $.ajax({
+            url:"/tag/"+item,
+            type:"get",
+            dataType:"json",
+            success:function (result) {
+                if(result.code!==200){
+                    tagInput.tagsinput("remove",item);
+                    alert(result.message);
+                }
+
+            }
+        })
+    })
+});
+
+function addTag(e) {
+    var tag = $(e).text();
+    tagInput.tagsinput("add",tag+",");
+}
+
+
+function publish() {
+    var data =  JSON.stringify($("#publishForm").serializeObject());
+    //console.log(JSON.parse(data));
+
+    //var data = $("#publishForm").serialize();
+    console.log(data);
+    $.ajax({
+        url:"/publish",
+        type:"POST",
+        data:data,
+        dataType:"json",
+        contentType:"application/json",
+        success:function (result) {
+            console.log(result.message);
+            if(result.code==200){
+                window.location.replace("/");
+            }
+
+        }
+    })
+
+
+}
+
+$.prototype.serializeObject=function(){
+    var obj=new Object();
+    $.each(this.serializeArray(),function(index,param){
+        if(!(param.name in obj)){
+            obj[param.name]=param.value;
+        }
+    });
+    return obj;
+};
+
+
 /**
  *对Date的扩展，将 Date 转化为指定格式的String
  *月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，

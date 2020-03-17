@@ -1,21 +1,31 @@
 package wang.kingweb.community.controller;
 
+import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import wang.kingweb.community.dto.RespDTO;
+import wang.kingweb.community.mapper.TagMapper;
 import wang.kingweb.community.model.Article;
+import wang.kingweb.community.model.Tag;
+import wang.kingweb.community.model.TagExample;
 import wang.kingweb.community.model.User;
 import wang.kingweb.community.mapper.ArticleMapper;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class PublishController {
     @Autowired
     ArticleMapper articleMapper;
+
+    @Autowired
+    TagMapper tagMapper;
 
     @GetMapping("/publish")
     public String publish(HttpServletRequest request,Model model){
@@ -25,72 +35,71 @@ public class PublishController {
         if(user==null){
             return "redirect:/";
         }
+        List<Tag> tags = tagMapper.selectByExample(new TagExample());
+
+        Map<String, List<Tag>> tagCollect = tags.stream().collect(Collectors.groupingBy(Tag::getTagType));
+
+        System.out.println("分组："+ JSON.toJSONString(tagCollect));
+        model.addAttribute("tags",tagCollect);
         model.addAttribute("article",new Article());
         return "publish";
 
     }
 
     @PostMapping("/publish")
-    public String doPublish(@RequestParam(name = "id") Long id,
-                            @RequestParam(name = "title") String title,
-                            @RequestParam(name = "description") String description,
-                            @RequestParam(name = "tag") String tag,
-                            HttpServletRequest request, Model model){
+    @ResponseBody
+    public RespDTO doPublish(@RequestBody Article article,
+                             HttpServletRequest request, Model model){
 
         //检查用户是否登录
         User user = (User) request.getSession().getAttribute("user");
         if(user==null){
             model.addAttribute("error","暂未登录，请登录后重试！");
-            return "publish";
+            return RespDTO.error("暂未登录，请登录后重试！");
         }
 
         //用于数据回显
-        Article articleShow = new Article();
+        /*Article articleShow = new Article();
 
         articleShow.setId(id);
         articleShow.setTitle(title);
         articleShow.setDescription(description);
-        articleShow.setTag(tag);
-        model.addAttribute("article",articleShow);
+        articleShow.setTag(tag);*/
+        model.addAttribute("article",article);
 
         //检测数据是否为空
-        if(title==null||title==""){
+        if(StringUtils.isBlank(article.getTitle())){
             model.addAttribute("error","请填写标题后提交！");
-            return "publish";
+            return RespDTO.error("请填写标题后提交！");
         }
-        if(description==null||description==""){
+        if(StringUtils.isBlank(article.getDescription())){
             model.addAttribute("error","请填写内容后提交！");
-            return "publish";
+            return RespDTO.error("请填写内容后提交！");
         }
-        if(tag==null||tag==""){
+        if(StringUtils.isBlank(article.getTag())){
             model.addAttribute("error","请填写标签后提交！");
-            return "publish";
+            return RespDTO.error("请填写标签后提交！");
         }
         //添加文章（问题）信息到数据库
 
-        articleShow.setModifiedTime(System.currentTimeMillis());
-
-        if(id!=null){
+        article.setModifiedTime(System.currentTimeMillis());
+        int result;
+        if(article.getId()!=null){
             //更新文章信息到数据库
-            articleShow.setId(id);
-            int result = articleMapper.updateByPrimaryKeySelective(articleShow);
-            if(result!=1){
-                //更新失败
-                model.addAttribute("error","发布失败，请稍后提交！");
-                return "publish";
-            }
+            result = articleMapper.updateByPrimaryKeySelective(article);
         }else{
-            articleShow.setAuthorId(user.getId().longValue());
-            articleShow.setCreateTime(articleShow.getModifiedTime());
+            article.setAuthorId(user.getId());
+            article.setCreateTime(article.getModifiedTime());
             //添加文章（问题）信息到数据库
-            int result = articleMapper.insertSelective(articleShow);
-            if(result!=1){
-                model.addAttribute("error","发布失败，请稍后提交！");
-                return "publish";
-            }
+            result = articleMapper.insertSelective(article);
+        }
+        if(result!=1){
+            //更新失败
+            model.addAttribute("error","发布失败，请稍后提交！");
+            return RespDTO.error("服务器忙~~");
         }
 
         //添加成功后，重定向到首页
-        return "redirect:/main/article";
+        return RespDTO.ok("发布成功！");
     }
 }
