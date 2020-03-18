@@ -1,5 +1,11 @@
 ### 个人博客
 
+#### 2020-03-18 v2.8
+优化文章详情页及编辑页，嵌入markdown编辑器
+[bootstrap-tagsinput](https://github.com/bootstrap-tagsinput/bootstrap-tagsinput)
+
+优化tag标签,使用第三方显示插件 
+[markdown](https://github.com/pandao/editor.md)
 ##### 2020-03-15 v2.7
     增加阅读数、对文章进行评论、对评论进行评论等功能，稍后完善点赞数
 
