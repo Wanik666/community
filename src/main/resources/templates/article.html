@@ -3,13 +3,7 @@
 <head>
     <!-- 踩过的坑，springboot引入静态资源路径不要加/static/，否则会报404-->
     <title>个人博客</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/community.css">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_yxz5icboc4.css">
-    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap-theme.min.css">
-    <script src="/jquery-1.12.4/jquery-1.12.4.min.js"></script>
-    <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <head th:insert="~{import :: head}"></head>
 </head>
 <body>
 
@@ -44,7 +38,7 @@
         <div class="list-group">
             <a href="/main/personal" th:class="${selection=='personal'?'active list-group-item':'list-group-item'} ">个人中心</a>
             <a href="/main/article" th:class="${selection=='article'?'active list-group-item':'list-group-item'} ">我的文章</a>
-            <a href="/main/message" th:class="${selection=='message'?'active list-group-item':'list-group-item'} ">我的消息<span class="badge">4</span></a>
+            <a href="/main/notification" th:class="${selection=='notification'?'active list-group-item':'list-group-item'} ">我的消息<span class="badge" th:text="${session.notification}"></span></a>
         </div>
     </div>
 </div>

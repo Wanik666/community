@@ -3,16 +3,18 @@
 <head>
     <!-- 踩过的坑，springboot引入静态资源路径不要加/static/，否则会报404-->
     <title th:text="${ArticleDetail.title}"></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/community.css">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_yxz5icboc4.css">
-    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap-theme.min.css">
-    <script src="/jquery-1.12.4/jquery-1.12.4.min.js"></script>
-    <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script src="/js/community.js"></script>
+    <head th:insert="~{import :: head}"></head>
+    <link rel="stylesheet" href="/markdown/css/editormd.preview.css">
+    <script src="/markdown/editormd.min.js"></script>
+    <script src="/markdown/lib/marked.min.js"></script>
+    <script src="/markdown/lib/prettify.min.js"></script>
 
 </head>
+<script>
+    $(function() {
+        var testView = editormd.markdownToHTML("show-markdown-view", {});
+    });
+</script>
 <body>
 
 <div th:replace="navigation :: nav"></div>
@@ -28,7 +30,8 @@
                     <a th:href="@{/article/edit(id=${ArticleDetail.getId()})}"><i class="iconfont icon-fabu2"></i>&nbsp;编辑</a>
                 </div>
             </div>
-            <div class="content" th:text="${ArticleDetail.description}">
+            <div id="show-markdown-view" class="content" >
+                <textarea style="display:none;" th:text="${ArticleDetail.description}"></textarea>
             </div>
             <div class="tagDiv">
                 <span class="label label-info tags" th:each="tag :${ArticleDetail.tag.split(',')}">
@@ -92,7 +95,7 @@
                     <div class="media">
                         <div class="media-comment">
                             <a href="#">
-                                <img class="img-rounded img-comment" th:src="${ArticleDetail.user.getAvatarUrl()}"  >
+                                <img class="img-rounded img-comment" th:src="${session.user.getAvatarUrl()}"  >
                             </a>
                         </div>
                     </div>

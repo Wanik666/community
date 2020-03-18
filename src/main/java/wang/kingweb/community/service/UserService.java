@@ -1,5 +1,6 @@
 package wang.kingweb.community.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wang.kingweb.community.dto.GitHubUser;
@@ -39,13 +40,17 @@ public class UserService {
         }else{
             //如果不存在添加新的用户信息
             User user = new User();
-            user.setName(gitHubUser.getName());
+            if(StringUtils.isBlank(gitHubUser.getName())){
+                user.setName("GitHub"+gitHubUser.getId());
+            }else{
+                user.setName(gitHubUser.getName());
+            }
             user.setAccountId(gitHubUser.getId());
             user.setToken(token);
             user.setAvatarUrl(gitHubUser.getAvatarUrl());
             user.setCreateTime(System.currentTimeMillis());
             user.setModifiedTime(user.getCreateTime());
-            userMapper.insertSelective(user);
+            userMapper.insert(user);
         }
         return token;
 

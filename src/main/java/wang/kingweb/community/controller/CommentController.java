@@ -39,17 +39,18 @@ public class CommentController {
         comment.setCommentor(user.getId());
         comment.setLikeCount(0);
         comment.setCommentCount(0);
-        commentService.insert(comment);
-        return RespDTO.ok(CustomizeErrorCode.COMMENT_SUCCESS.getMessage(),user);
+        Integer result = commentService.insert(comment);
+        if(result==1){
+
+            return RespDTO.ok(CustomizeErrorCode.COMMENT_SUCCESS.getMessage(),user);
+        }else {
+            return RespDTO.error(CustomizeErrorCode.COMMENT_FAILED.getMessage());
+        }
     }
 
     @GetMapping("/childComment")
     @ResponseBody
     public RespDTO getChildComments(@Param("childId") Long childId, HttpServletRequest request){
-        User user = (User) request.getSession().getAttribute("user");
-        if(user==null){
-            return RespDTO.error(CustomizeErrorCode.NOT_LOGIN.getMessage());
-        }
         if(StringUtils.isEmpty(childId)){
             return RespDTO.error(CustomizeErrorCode.COMMENT_NOT_FOUND.getMessage());
         }

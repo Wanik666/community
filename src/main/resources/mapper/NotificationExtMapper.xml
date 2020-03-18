@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wang.kingweb.community.mapper.NotificationExtMapper">
+  <resultMap id="BaseResultMap" type="wang.kingweb.community.model.Notification">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sender_id" jdbcType="BIGINT" property="senderId" />
+    <result column="receiver_id" jdbcType="BIGINT" property="receiverId" />
+    <result column="outer_id" jdbcType="BIGINT" property="outerId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="create_time" jdbcType="BIGINT" property="createTime" />
+    <result column="article_title" jdbcType="VARCHAR" property="articleTitle" />
+  </resultMap>
+  <select id="selectNotificationByLimit" resultMap="BaseResultMap">
+    select * from notification
+    where receiver_id = #{id}
+    order by create_time desc
+    limit #{offset},#{size}
+  </select>
+
+</mapper>

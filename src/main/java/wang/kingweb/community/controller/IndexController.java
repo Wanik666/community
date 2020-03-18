@@ -30,10 +30,10 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request, Model model,
-                        @RequestParam(value = "page",defaultValue = "1") int page,
-                        @RequestParam(value = "size",defaultValue = "5") int size){
+                        @RequestParam(value = "page",defaultValue = "1") Long page,
+                        @RequestParam(value = "size",defaultValue = "5") Long size){
 
-        int totalCount = (int)articleMapper.countByExample(new ArticleExample());
+        Long totalCount = articleMapper.countByExample(new ArticleExample());
         PaginationDTO paginationDTO =  paginationService.getPageInfo(page,size,totalCount);
 
         model.addAttribute("paginationInfo",paginationDTO);

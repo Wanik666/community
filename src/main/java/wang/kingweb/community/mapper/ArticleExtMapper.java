@@ -10,13 +10,13 @@ import java.util.List;
 
 
 public interface ArticleExtMapper {
-    List<ArticleDTO> selectArticleWithUser(@Param("uid") Long uid, @Param("offset") int offset, @Param("size") int size);
+    List<ArticleDTO> selectArticleWithUser(@Param("uid") Long uid, @Param("offset") Long offset, @Param("size") Long size);
 
     ArticleDTO selectArticleById(@Param("id") long id);
 
     void incView(Article article);
 
-    void incComment(Article article);
+    Integer incComment(Article article);
 
     List<Article> getAboutArticles(Article article);
 }

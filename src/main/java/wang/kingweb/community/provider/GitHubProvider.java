@@ -5,6 +5,8 @@ import okhttp3.*;
 import org.springframework.stereotype.Component;
 import wang.kingweb.community.dto.AccessTokenParam;
 import wang.kingweb.community.dto.GitHubUser;
+import wang.kingweb.community.enums.CustomizeErrorCode;
+import wang.kingweb.community.exception.CustomizeException;
 
 import java.io.IOException;
 
@@ -26,9 +28,8 @@ public class GitHubProvider {
             return accessonToken;
         } catch (IOException e) {
             e.printStackTrace();
+            throw new CustomizeException(CustomizeErrorCode.GITHUB_AUTH_WRONG);
         }
-        return null;
-
     }
     //用来获取github用户信息
     public GitHubUser getGitHubUser(String access_token){
@@ -42,7 +43,8 @@ public class GitHubProvider {
             return gitHubUser;
         } catch (IOException e) {
             e.printStackTrace();
+            throw new CustomizeException(CustomizeErrorCode.GITHUB_AUTH_WRONG);
+
         }
-        return null;
     }
 }

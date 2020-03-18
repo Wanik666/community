@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- 踩过的坑，springboot引入静态资源路径不要加/static/，否则会报404-->
+    <title>个人博客</title>
+    <head th:insert="~{import :: head}"></head>
+</head>
+<body>
+
+<div th:replace="navigation :: nav"></div>
+
+<div class="row main">
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 col-left">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"><h4><i class="glyphicon glyphicon-envelope"></i>&nbsp;我的消息</h4></div>
+        </div>
+        <div class="notification-margin media_list" th:each="notification : ${notifications}">
+            <div>
+                <span th:class="${notification.isRead()?'label label-default notification-label':'label label-danger notification-label'}" th:text="${notification.isRead()?' 已读 ':' 未读 ' }"></span>
+                <span th:text="${notification.getUserName()}"></span>
+                <span th:text="${notification.getInfo()}"></span>
+                <a th:href="@{/notification/read/{nid}/{aid}(nid=${notification.getId()},aid = ${notification.getOuterId()})}"  th:text="${notification.getArticleTitle()}"></a>
+            </div>
+        </div>
+        <!-- 分页 -->
+        <div th:replace="pagination :: page"></div>
+    </div>
+    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <div class="list-group">
+            <a href="/main/personal" th:class="${selection=='personal'?'active list-group-item':'list-group-item'} ">个人中心</a>
+            <a href="/main/article" th:class="${selection=='article'?'active list-group-item':'list-group-item'} ">我的文章</a>
+            <a href="/main/notification" th:class="${selection=='notification'?'active list-group-item':'list-group-item'} ">我的消息<span class="badge" th:text="${session.notification}"></span></a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

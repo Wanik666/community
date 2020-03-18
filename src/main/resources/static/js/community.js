@@ -137,9 +137,6 @@ var tagInput = undefined;
 
 $(function() {
     tagInput = $("input[data-role=tagsinput]");
-    tagInput.tagsinput({
-        maxTags: 5
-    });
 
     tagInput.on('itemAdded',function (event) {
         var item = event.item;

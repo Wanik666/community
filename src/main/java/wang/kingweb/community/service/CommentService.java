@@ -8,6 +8,8 @@ import org.springframework.util.StringUtils;
 import wang.kingweb.community.dto.CommentDTO;
 import wang.kingweb.community.enums.CommentType;
 import wang.kingweb.community.enums.CustomizeErrorCode;
+import wang.kingweb.community.enums.NotificationStatusEnum;
+import wang.kingweb.community.enums.NotificationTypeEnum;
 import wang.kingweb.community.exception.CustomizeException;
 import wang.kingweb.community.mapper.*;
 import wang.kingweb.community.model.*;
@@ -36,27 +38,51 @@ public class CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    NotificationMapper notificationMapper;
+
     @Transactional
-    public void insert(Comment comment){
+    public Integer insert(Comment comment){
+        //评论的对象，可能是文章id，也可能是评论id
         Long parentId = null;
-        Article article1 = articleMapper.selectByPrimaryKey(comment.getParentId());
+
         if(comment.getType()==null || !CommentType.isExist(comment.getType())){
             throw new CustomizeException(CustomizeErrorCode.COMMENT_TYPE_WRONG);
         }
 
         //对文章进行评论
         if(comment.getType()==CommentType.ARTICLE.getType()){
-            if(comment.getParentId()==null || articleMapper.selectByPrimaryKey(comment.getParentId())==null){
+            //文章的id
+            parentId = comment.getParentId();
+            Article selectArticle = null;
+            if(parentId!=null){
+                selectArticle = articleMapper.selectByPrimaryKey(parentId);
+
+            }
+            if( selectArticle != null){
+                //添加通知信息到notification表
+                insertNotificationInfo(comment, selectArticle.getAuthorId(),selectArticle,NotificationTypeEnum.NOTIFICATION_TYPE_OF_ARTICLE.getType());
+            }else{
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_ARTICLE_ID_NOT_FOUND);
             }
-            parentId = comment.getParentId();
         }else {
             Comment parentComment = commentMapper.selectByPrimaryKey(comment.getParentId());
+            Article article = null;
             if(parentComment!=null){
                 parentId = parentComment.getParentId();
+                if(parentId!=null){
+                    article = articleMapper.selectByPrimaryKey(parentId);
+                }
+            }
+            if( article != null){
+                //回复评论者
+                insertNotificationInfo(comment, parentComment.getCommentor(),article,NotificationTypeEnum.NOTIFICATION_TYPE_OF_COMMENT.getType());
+                //回复文章作者
+                insertNotificationInfo(comment, article.getAuthorId(),article,NotificationTypeEnum.NOTIFICATION_TYPE_OF_ARTICLE.getType());
             }else {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_ARTICLE_ID_NOT_FOUND);
             }
+            //查询评论的文章
             Comment updateComment = new Comment();
             updateComment.setCommentCount(1);
             updateComment.setId(comment.getParentId());
@@ -64,6 +90,7 @@ public class CommentService {
             if(comment.getParentId()==null || commentMapper.selectByPrimaryKey(comment.getParentId())==null){
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
+
         }
         //添加评论内容
         commentMapper.insert(comment);
@@ -71,7 +98,25 @@ public class CommentService {
         //评论数递增
         article.setId(parentId);
         article.setAnswerCount(1);
-        articleExtMapper.incComment(article);
+        return articleExtMapper.incComment(article);
+    }
+
+    public Integer insertNotificationInfo(Comment comment, Long id,Article article, int type) {
+        if(type==NotificationTypeEnum.NOTIFICATION_TYPE_OF_COMMENT.getType()&&id == comment.getCommentor()){
+            return null;
+        }else if(type == NotificationTypeEnum.NOTIFICATION_TYPE_OF_ARTICLE.getType()&&id == comment.getCommentor()){
+            return null;
+        }
+
+        Notification notification = new Notification();
+        notification.setOuterId(article.getId());
+        notification.setSenderId(comment.getCommentor());
+        notification.setStatus(NotificationStatusEnum.NOTIFICATION_UNREAD.getStatus());
+        notification.setCreateTime(System.currentTimeMillis());
+        notification.setType(type);
+        notification.setReceiverId(id);
+        notification.setArticleTitle(article.getTitle());
+        return notificationMapper.insert(notification);
     }
 
     public List<CommentDTO> selectCommentsById(long id,int type) {

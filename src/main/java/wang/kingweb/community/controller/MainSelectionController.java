@@ -34,8 +34,8 @@ public class MainSelectionController {
 
     @GetMapping("/main/{selection}")
     public String article(@PathVariable(name = "selection") String selection,
-                          @RequestParam(name = "page" ,defaultValue = "1") int page,
-                          @RequestParam(name = "size" ,defaultValue = "5") int size,
+                          @RequestParam(name = "page" ,defaultValue = "1") Long page,
+                          @RequestParam(name = "size" ,defaultValue = "5") Long size,
                           HttpServletRequest request,
                           Model model){
         //检查用户是否登录
@@ -47,7 +47,7 @@ public class MainSelectionController {
         articleExample.createCriteria().andAuthorIdEqualTo(user.getId().longValue());
         long totalCount = articleMapper.countByExample(articleExample);
 
-        PaginationDTO paginationDTO =  paginationService.getPageInfo(page,size,(int)totalCount);
+        PaginationDTO paginationDTO =  paginationService.getPageInfo(page,size,totalCount);
         model.addAttribute("paginationInfo",paginationDTO);
         switch (selection){
             case "article":
@@ -60,8 +60,9 @@ public class MainSelectionController {
                 return "article";
             case "personal":
                 return "personal";
-            case "message":
-                return "message";
+            case "notification":
+
+                return "redirect:/notification";
             default:
                 return "redirect:/";
         }

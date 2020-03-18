@@ -1,9 +1,13 @@
 package wang.kingweb.community.interceptor;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import wang.kingweb.community.enums.NotificationStatusEnum;
+import wang.kingweb.community.mapper.NotificationMapper;
+import wang.kingweb.community.model.NotificationExample;
 import wang.kingweb.community.model.User;
 import wang.kingweb.community.mapper.UserMapper;
 import wang.kingweb.community.model.UserExample;
@@ -14,10 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Component
-public class SessionIntercetpor implements HandlerInterceptor {
+public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private NotificationMapper notificationMapper;
     //preHandle方法是在请求之前执行（Controller之前）
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -35,6 +42,16 @@ public class SessionIntercetpor implements HandlerInterceptor {
                     if(userList.size()>0){
                         user = userList.get(0);
                         request.getSession().setAttribute("user",user);
+
+                        //获取当前用户消息
+                        NotificationExample notificationExample = new NotificationExample();
+                        notificationExample.createCriteria()
+                                .andReceiverIdEqualTo(user.getId())
+                                .andStatusEqualTo(NotificationStatusEnum.NOTIFICATION_UNREAD.getStatus());
+                        long count = notificationMapper.countByExample(notificationExample);
+                        request.getSession().setAttribute("notification",count);
+
+
                     }
 
                 }

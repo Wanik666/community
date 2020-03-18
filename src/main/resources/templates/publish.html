@@ -3,35 +3,63 @@
 <head>
     <!-- 踩过的坑，springboot引入静态资源路径不要加/static/，否则会报404-->
     <title>发布文章</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/community.css">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_1643567_yxz5icboc4.css">
-    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap-theme.min.css">
+    <head th:insert="~{import :: head}"></head>
     <link rel="stylesheet" href="/bootstrap-tagsinput/bootstrap-tagsinput.css">
-    <script src="/jquery-2.1.4/jquery.js"></script>
-    <!--<script src="/jquery-1.12.4/jquery-1.12.4.min.js"></script>-->
-    <script src="/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-
+    <link rel="stylesheet" href="/markdown/css/editormd.css">
     <script src="/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
-    <script src="/js/community.js"></script>
+    <script src="/markdown/editormd.min.js"></script>
 
 
 </head>
 <script>
+    $(function () {
+        var CodeMirror_height = undefined;
+        var editor = editormd("article-editor", {
+            width: "100%",
+            height: "400px",
+            path: "/markdown/lib/",
+            placeholder:"",
+            imageUpload    : true,
+            imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL : "/img/upload",
+            toolbarIcons : function() {  //自定义工具栏，后面有详细介绍
+                return [
+                    "undo", "redo", "|",
+                    "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
+                    "list-ul", "list-ol", "hr", "|",
+                    "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "html-entities", "pagebreak", "|",
+                    "watch", "preview",  "|",
+                    "help"
+                ]; // full, simple, mini
+            },
+            onfullscreen:function () {
+                CodeMirror_height = $(".CodeMirror-gutters").css("height");
+                $(".CodeMirror-gutters").css("height","100%");
+                $("#tagDiv").css("display","none");
+                //隐藏标签栏
+            },
+            onfullscreenExit:function () {
+                //显示标签栏
+                //CodeMirror-gutters
+                $(".CodeMirror-gutters").css("height","100%");
+                $("#tagDiv").css("display","block");
+        }
 
+        });
+    });
 </script>
 <body>
 <div th:replace="navigation :: nav"></div>
 <!-- 问题发布栏 -->
 <div class="row main">
-    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"><h4><i class="iconfont icon-fabu"></i>&nbsp;发起</h4></div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-9 alertMsg">
                 <div class="alert alert-danger alert-dismissible alert-error" role="alert" th:if="${error != null}">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <span th:text="${error}"></span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <span th:text="${error}"></span>
                 </div>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3"></div>
@@ -41,30 +69,38 @@
         <hr>
         <form id="publishForm">
             <div style="display: none">
-                <input type="text" id="id"  name="id"  th:value="${article.id}"/>
+                <input type="text" id="id" name="id" th:value="${article.id}"/>
             </div>
             <div class="form-group">
                 <label for="title">文章标题:</label>
-                <input type="text" class="form-control" th:value="${article.title}" id="title" name="title" placeholder="填写标题......">
+                <input type="text" class="form-control" th:value="${article.title}" id="title" name="title"
+                       placeholder="填写标题......">
             </div>
             <div class="form-group">
                 <label for="description">文章内容(请参考右侧提示填写):</label>
-                <textarea id="description" name="description" th:text="${article.description}" class="form-control" rows="12" cols="10"></textarea>
+                <div id="article-editor">
+                    <textarea id="description" style="display: none" name="description" th:text="${article.description}"
+                              class="form-control"></textarea>
+                </div>
             </div>
             <div class="form-group">
                 <label for="tag">标签:</label>
-                <input type="text" class="form-control tag-input" id="tag" name="tag" th:value="${article.tag}" data-role="tagsinput"   placeholder="请填写标签......">
+                <input type="text" class="form-control tag-input" id="tag" name="tag" th:value="${article.tag}"
+                       data-role="tagsinput" placeholder="请填写标签......">
             </div>
-            <div>
+            <div class="form-group" id="tagDiv">
                 <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist" >
-                    <li role="presentation" th:each="tagMap,index :${tags}" th:class="${index.first ? 'active':''}" ><a th:href="${'#'+tagMap.key}" aria-controls="home" role="tab" data-toggle="tab" th:text="${tagMap.key}"></a></li>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" th:each="tagMap,index :${tags}" th:class="${index.first ? 'active':''}"><a
+                            th:href="${'#'+tagMap.key}" aria-controls="home" role="tab" data-toggle="tab"
+                            th:text="${tagMap.key}"></a></li>
                 </ul>
 
                 <!-- Tab panes -->
 
                 <div class="tab-content">
-                    <div role="tabpanel" th:id="${tagMap.key}" th:each="tagMap,index:${tags}" th:class="${index.first ? 'active tab-pane':'tab-pane'}">
+                    <div role="tabpanel" th:id="${tagMap.key}" th:each="tagMap,index:${tags}"
+                         th:class="${index.first ? 'active tab-pane':'tab-pane'}">
                         <span class="label label-info tags" th:each="tag :${tagMap.value}">
                             <span class="glyphicon glyphicon-tags"> </span>
                             <span th:text="${tag.getTagName()}" onclick="addTag(this)"></span>
@@ -78,14 +114,7 @@
             </div>
         </form>
     </div>
-    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-        <h4>文章发布要求：</h4>
-        <ul>
-            <li>文章标题：请用精简的语言描述您发布的问题，不超过25字</li>
-            <li>文章内容：填写文章具体描述的内容</li>
-            <li>标签：填写一个或多个合适标签，每个不超过10个字</li>
-        </ul>
-    </div>
+
 </div>
 
 </body>

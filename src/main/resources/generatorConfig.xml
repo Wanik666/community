@@ -48,6 +48,7 @@
         <table  tableName="article" domainObjectName="Article" ></table>
         <table  tableName="comment" domainObjectName="Comment" ></table>
         <table  tableName="tag" domainObjectName="Tag" ></table>
+        <table  tableName="notification" domainObjectName="Notification" ></table>
 
     </context>
 </generatorConfiguration>

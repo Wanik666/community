@@ -20,6 +20,7 @@ public class LoginController {
     @GetMapping("/logout")
     public String Logout(HttpServletRequest request, HttpServletResponse response){
         request.getSession().removeAttribute("user");
+        request.getSession().removeAttribute("notification");
         Cookie cookie = new Cookie("token",null);
         response.addCookie(cookie);
         return "redirect:/";
