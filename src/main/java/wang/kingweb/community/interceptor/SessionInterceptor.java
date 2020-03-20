@@ -31,7 +31,7 @@ public class SessionInterceptor implements HandlerInterceptor {
     //preHandle方法是在请求之前执行（Controller之前）
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        request.setAttribute("redirectUri",redirectUri);
+        request.getServletContext().setAttribute("redirectUri",redirectUri);
         //处理用户session验证，如果用户没登录，验证不通过，不允许访问，反之可以访问
         User user;
         Cookie[] cookies = request.getCookies();
