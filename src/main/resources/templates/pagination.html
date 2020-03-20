@@ -29,7 +29,15 @@
             </li>
         </ul>
     </nav>
-    <div class="noArticle" th:if="${paginationInfo.countPage == 0}">暂无数据,点击 <a th:href=" @{/publish}">这里</a>写一篇文章吧</div>
+
+    <div class="noArticle" th:if="${paginationInfo.countPage == 0}">
+        <div th:if="${session.user!=null}">
+            暂无相关数据,点击 <a th:href=" @{/publish}">这里</a>写一篇文章吧
+        </div>
+        <div th:if="${session.user==null}">
+            尚未登录 请点击<a th:href=" @{/login}">这里</a>开始登录
+        </div>
+    </div>
 </div>
 </body>
 </html>

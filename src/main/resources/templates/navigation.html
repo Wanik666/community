@@ -3,19 +3,28 @@
 <body>
 <div th:fragment="nav">
     <!--顶部导航栏-->
+
+
     <nav class="navbar navbar-default">
         <div class="container-fluid">
+
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-controls="bs-navbar" aria-expanded="false">
                     <span class="sr-only">个人博客</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="/">个人博客</a>
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <form class="navbar-form navbar-left" th:action="@{${#httpServletRequest.getContextPath()}}" method="get">
+                <form class="navbar-form navbar-left" th:action="@{${#httpServletRequest.getContextPath()}}"
+                      method="get">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="search" th:value="${search}" placeholder="请搜索问题">
+                        <input type="text" class="form-control" name="search" th:value="${search}"
+                               placeholder="请搜索问题">
                     </div>
                     <button type="submit" class="btn btn-default">搜索</button>
                 </form>
@@ -25,11 +34,11 @@
                     </li>
                 </ul>
 
-                <ul class="nav navbar-nav navbar-right"  th:if="${session.user!=null}">
-                    <li >
+                <ul class="nav navbar-nav navbar-right" th:if="${session.user!=null}">
+                    <li>
                         <a href="/publish"><i class="iconfont icon-fabu2"></i>&nbsp;&nbsp;写文章</a>
                     </li>
-                    <li >
+                    <li>
                         <a href="/notification">
                             <i class="glyphicon glyphicon-envelope"></i>
                             <span th:class="${session.notification>0?'notification-yellow-point':''}"></span>
@@ -37,11 +46,15 @@
                     </li>
 
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span th:text="${session.user.name}"></span><span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false"><span
+                                th:text="${session.user.name}"></span><span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/main/personal">个人中心</a></li>
                             <li><a href="/main/article">我的文章</a></li>
-                            <li><a href="/notification">我的消息<span th:if="${session.notification>0}" th:class="${session.notification>0?'badge newBadge':''}" th:text="${session.notification}"></span></a></li>
+                            <li><a href="/notification">我的消息<span th:if="${session.notification>0}"
+                                                                  th:class="${session.notification>0?'badge newBadge':''}"
+                                                                  th:text="${session.notification}"></span></a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/logout">退出登录</a></li>
                         </ul>
@@ -50,6 +63,8 @@
             </div>
         </div>
     </nav>
+
+
 </div>
 </body>
 </html>

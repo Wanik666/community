@@ -14,7 +14,7 @@
     </div>
     <div class="login-other">
         <h5>第三方账号登录</h5>
-        <a th:href="@{https://github.com/login/oauth/authorize(client_id='b5bf62ea34e5a9ba7cf5',redirect_uri=${#httpServletRequest.getServletContext().getAttribute('redirectUri')},scope='user',state=1)}"  class="btn btn-primary btn-block btn-github" onclick="doLogin()" role="button">
+        <a th:href="@{https://github.com/login/oauth/authorize(client_id=${#httpServletRequest.getServletContext().getAttribute('clientId')},redirect_uri=${#httpServletRequest.getServletContext().getAttribute('redirectUri')},scope='user',state=1)}"  class="btn btn-primary btn-block btn-github" onclick="doLogin()" role="button">
             <i class="iconfont icon-GitHub">  </i>
             GitHub 登录
         </a>
