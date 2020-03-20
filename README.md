@@ -1,5 +1,9 @@
 ### 个人博客
 
+#### 2020-0320 v2.9
+个人博客系统上线
+[我的博客](http://117.50.105.238)
+
 #### 2020-03-18 v2.8
 优化文章详情页及编辑页，嵌入markdown编辑器
 [bootstrap-tagsinput](https://github.com/bootstrap-tagsinput/bootstrap-tagsinput)
