@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import wang.kingweb.community.dto.NotificationDTO;
 import wang.kingweb.community.dto.PaginationDTO;
-import wang.kingweb.community.dto.RespDTO;
 import wang.kingweb.community.enums.CustomizeErrorCode;
 import wang.kingweb.community.enums.NotificationStatusEnum;
 import wang.kingweb.community.exception.CustomizeException;

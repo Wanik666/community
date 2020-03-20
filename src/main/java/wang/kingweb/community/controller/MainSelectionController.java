@@ -1,7 +1,6 @@
 package wang.kingweb.community.controller;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,11 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import wang.kingweb.community.dto.ArticleDTO;
 import wang.kingweb.community.dto.PaginationDTO;
 import wang.kingweb.community.mapper.ArticleExtMapper;
-import wang.kingweb.community.mapper.UserMapper;
-import wang.kingweb.community.model.Article;
+import wang.kingweb.community.mapper.ArticleMapper;
 import wang.kingweb.community.model.ArticleExample;
 import wang.kingweb.community.model.User;
-import wang.kingweb.community.mapper.ArticleMapper;
 import wang.kingweb.community.service.PaginationService;
 
 import javax.servlet.http.HttpServletRequest;

@@ -11,12 +11,9 @@ import wang.kingweb.community.mapper.CommentMapper;
 import wang.kingweb.community.model.Article;
 import wang.kingweb.community.model.Comment;
 import wang.kingweb.community.model.CommentExample;
-import wang.kingweb.community.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service

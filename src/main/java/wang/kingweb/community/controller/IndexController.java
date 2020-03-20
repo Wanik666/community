@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import wang.kingweb.community.dto.ArticleDTO;
 import wang.kingweb.community.dto.PaginationDTO;
 import wang.kingweb.community.mapper.ArticleExtMapper;
-import wang.kingweb.community.model.Article;
 import wang.kingweb.community.mapper.ArticleMapper;
-import wang.kingweb.community.model.ArticleExample;
 import wang.kingweb.community.service.PaginationService;
 
 import javax.servlet.http.HttpServletRequest;
