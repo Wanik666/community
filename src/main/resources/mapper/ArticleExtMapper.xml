@@ -37,6 +37,25 @@
     limit #{offset},#{size}
 
   </select>
+  <select id="selectArticleWithUserBySearch" resultMap="BaseResultMapAndUser">
+    select a.*,u.id as uid,u.name as uname,u.avatar_url as avatar_url from article a,user u
+    <where>
+      a.author_id = u.id
+      <if test="uid!=null">
+        and a.author_id = #{uid}
+      </if>
+      <if test="search!=null">
+        <foreach collection="search.split(' ')" item="s" index="index" open="and (" close=")"  separator="or" >
+
+          title like concat('%',#{s},'%')
+
+        </foreach>
+      </if>
+    </where>
+    order by a.create_time desc
+    limit #{offset},#{size}
+
+  </select>
   <select id="selectArticleById" resultMap="BaseResultMapAndUser">
     select a.*,u.id as uid,u.name as uname,u.avatar_url as avatar_url from article a,user u
     where u.id=a.author_id and a.id = #{id}
@@ -58,7 +77,21 @@
      </where>
 
   </select>
+  <select id="countBySearch" resultType="java.lang.Long">
+    select count(*) from article
+    <where>
+      <if test="id!=null">
+        and author_id = #{id}
+      </if>
+      <if test="search!=null">
+        <foreach collection="search.split(' ')" item="s" index="index" open="and (" close=")"  separator="or" >
 
+          title like concat('%',#{s},'%')
+
+        </foreach>
+      </if>
+    </where>
+  </select>
   <update id="incView" parameterType="wang.kingweb.community.model.Article">
     update article set read_count = read_count + #{readCount} where id = #{id}
   </update>

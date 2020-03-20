@@ -62,6 +62,7 @@ public class CommentService {
             if( selectArticle != null){
                 //添加通知信息到notification表
                 insertNotificationInfo(comment, selectArticle.getAuthorId(),selectArticle,NotificationTypeEnum.NOTIFICATION_TYPE_OF_ARTICLE.getType());
+
             }else{
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_ARTICLE_ID_NOT_FOUND);
             }
@@ -77,8 +78,10 @@ public class CommentService {
             if( article != null){
                 //回复评论者
                 insertNotificationInfo(comment, parentComment.getCommentor(),article,NotificationTypeEnum.NOTIFICATION_TYPE_OF_COMMENT.getType());
-                //回复文章作者
+
                 insertNotificationInfo(comment, article.getAuthorId(),article,NotificationTypeEnum.NOTIFICATION_TYPE_OF_ARTICLE.getType());
+
+                //回复文章作者
             }else {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_ARTICLE_ID_NOT_FOUND);
             }
@@ -102,12 +105,7 @@ public class CommentService {
     }
 
     public Integer insertNotificationInfo(Comment comment, Long id,Article article, int type) {
-        if(type==NotificationTypeEnum.NOTIFICATION_TYPE_OF_COMMENT.getType()&&id == comment.getCommentor()){
-            return null;
-        }else if(type == NotificationTypeEnum.NOTIFICATION_TYPE_OF_ARTICLE.getType()&&id == comment.getCommentor()){
-            return null;
-        }
-
+        if(id == comment.getCommentor()) return null;
         Notification notification = new Notification();
         notification.setOuterId(article.getId());
         notification.setSenderId(comment.getCommentor());

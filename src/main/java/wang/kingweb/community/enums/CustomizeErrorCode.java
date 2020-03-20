@@ -2,7 +2,7 @@ package wang.kingweb.community.enums;
 
 public enum CustomizeErrorCode{
     SYS_ERROR("服务器出错了，过一会再试试吧"),
-    GITHUB_AUTH_WRONG("GitHub授权登录异常，过一会再试试吧~~"),
+    GITHUB_AUTH_WRONG("GitHub服务器当前不稳定，过一会再登录试试~~"),
     FILE_NOT_FOUND("您要找的资源不存在或者被删除了，您可以查看其他文章"),
     COMMENT_ARTICLE_ID_NOT_FOUND("需要评论的文章不存在或被删除了，请查看其他文章"),
     NOT_LOGIN("您当前尚未登录，登录后方可进行评论!"),

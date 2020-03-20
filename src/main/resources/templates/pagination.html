@@ -7,23 +7,23 @@
 
         <ul class="pagination">
             <li th:if="${paginationInfo.isHasFirstPage()}">
-                <a th:href="@{${#httpServletRequest.getContextPath()}(page=1)}" aria-label="First">
+                <a th:href="@{${#httpServletRequest.getContextPath()}(page=1,search=${search})}" aria-label="First">
                     <span aria-hidden="true">&lt;&lt;</span>
                 </a>
             </li>
             <li th:if="${paginationInfo.isHasPrePage()}">
-                <a th:href="@{${#httpServletRequest.getContextPath()}(page=${paginationInfo.page-1})}" aria-label="Previous">
+                <a th:href="@{${#httpServletRequest.getContextPath()}(page=${paginationInfo.page-1},search=${search})}" aria-label="Previous">
                     <span aria-hidden="true">&lt;</span>
                 </a>
             </li>
-            <li th:each="page: ${paginationInfo.getPageList()}" th:class="${page==paginationInfo.page}? 'active'"><a th:href="@{${#httpServletRequest.getContextPath()}(page = ${page})}" th:text="${page}"></a></li>
+            <li th:each="page: ${paginationInfo.getPageList()}" th:class="${page==paginationInfo.page}? 'active'"><a th:href="@{${#httpServletRequest.getContextPath()}(page = ${page},search=${search})}" th:text="${page}"></a></li>
             <li th:if="${paginationInfo.isHasNextPage()}">
-                <a th:href="@{${#httpServletRequest.getContextPath()}(page=${paginationInfo.page+1})}" aria-label="Next">
+                <a th:href="@{${#httpServletRequest.getContextPath()}(page=${paginationInfo.page+1},search=${search})}" aria-label="Next">
                     <span aria-hidden="true">&gt;</span>
                 </a>
             </li>
             <li th:if="${paginationInfo.isHasLastPage()}">
-                <a th:href="@{${#httpServletRequest.getContextPath()}(page=${paginationInfo.getCountPage()})}" aria-label="Last">
+                <a th:href="@{${#httpServletRequest.getContextPath()}(page=${paginationInfo.getCountPage()},search=${search})}" aria-label="Last">
                     <span aria-hidden="true">&gt;&gt;</span>
                 </a>
             </li>

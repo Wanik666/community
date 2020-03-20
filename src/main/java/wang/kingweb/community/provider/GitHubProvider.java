@@ -1,6 +1,7 @@
 package wang.kingweb.community.provider;
 
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 import wang.kingweb.community.dto.AccessTokenParam;
@@ -10,6 +11,7 @@ import wang.kingweb.community.exception.CustomizeException;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class GitHubProvider {
     //获取accessToken
@@ -28,6 +30,7 @@ public class GitHubProvider {
             return accessonToken;
         } catch (IOException e) {
             e.printStackTrace();
+            log.error("github授权获取token异常,{}",e);
             throw new CustomizeException(CustomizeErrorCode.GITHUB_AUTH_WRONG);
         }
     }
@@ -43,6 +46,7 @@ public class GitHubProvider {
             return gitHubUser;
         } catch (IOException e) {
             e.printStackTrace();
+            log.error("从github获取githubUser信息异常,{}",e);
             throw new CustomizeException(CustomizeErrorCode.GITHUB_AUTH_WRONG);
 
         }

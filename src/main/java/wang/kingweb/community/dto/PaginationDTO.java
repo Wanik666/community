@@ -51,7 +51,7 @@ public class PaginationDTO {
         }
 
         //首页、尾页、上一页、下一页是否展示
-        if(pageList.contains(1)){
+        if(pageList.contains(1L)){
             hasFirstPage = false;
         }else{
             hasFirstPage = true;
@@ -61,7 +61,7 @@ public class PaginationDTO {
         }else {
             hasLastPage = true;
         }
-        if(page!=1){
+        if(page!=1L){
             hasPrePage = true;
         }else{
             hasPrePage = false;

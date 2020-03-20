@@ -1,5 +1,6 @@
 package wang.kingweb.community.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,7 @@ public class MainSelectionController {
 
     @GetMapping("/main/{selection}")
     public String article(@PathVariable(name = "selection") String selection,
+                          @RequestParam(name = "search",required = false) String search,
                           @RequestParam(name = "page" ,defaultValue = "1") Long page,
                           @RequestParam(name = "size" ,defaultValue = "5") Long size,
                           HttpServletRequest request,
@@ -45,14 +47,17 @@ public class MainSelectionController {
         }
         ArticleExample articleExample = new ArticleExample();
         articleExample.createCriteria().andAuthorIdEqualTo(user.getId().longValue());
-        long totalCount = articleMapper.countByExample(articleExample);
-
+        //long totalCount = articleMapper.countByExample(articleExample);
+        Long totalCount = articleExtMapper.countBySearch(user.getId(),search);
         PaginationDTO paginationDTO =  paginationService.getPageInfo(page,size,totalCount);
         model.addAttribute("paginationInfo",paginationDTO);
+        if(StringUtils.isNotBlank(search)){
+            model.addAttribute("search",search);
+        }
         switch (selection){
             case "article":
                 //查询当前用户的所有文章
-                List<ArticleDTO> myArticleList = articleExtMapper.selectArticleWithUser(user.getId(),paginationDTO.getOffset(), size);
+                List<ArticleDTO> myArticleList = articleExtMapper.selectArticleWithUserBySearch(search,user.getId(),paginationDTO.getOffset(), size);
 
                 model.addAttribute("myArticleList",myArticleList);
                 //用于判断当前的操作

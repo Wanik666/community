@@ -3,7 +3,6 @@ package wang.kingweb.community.controller;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,7 +40,6 @@ public class CommentController {
         comment.setCommentCount(0);
         Integer result = commentService.insert(comment);
         if(result==1){
-
             return RespDTO.ok(CustomizeErrorCode.COMMENT_SUCCESS.getMessage(),user);
         }else {
             return RespDTO.error(CustomizeErrorCode.COMMENT_FAILED.getMessage());
