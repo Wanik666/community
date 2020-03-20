@@ -30,8 +30,8 @@ public class AuthorizationController {
     private String client_id;
     @Value("${github.client.secret}")
     private String client_secret;
-    @Value("${github.redirect.url}")
-    private String redirect_url;
+    @Value("${github.redirect.uri}")
+    private String redirect_uri;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
@@ -43,7 +43,7 @@ public class AuthorizationController {
         accessTokenParam.setState(state);
         accessTokenParam.setClient_id(client_id);
         accessTokenParam.setClient_secret(client_secret);
-        accessTokenParam.setRedirect_uri(redirect_url);
+        accessTokenParam.setRedirect_uri(redirect_uri);
         String Token = gitHubProvider.getAccessToken(accessTokenParam);   //获取到access_token
         String accessToken = Token.split("&")[0].split("=")[1];
         //使用access_token获取用户信息
