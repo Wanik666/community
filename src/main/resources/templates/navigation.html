@@ -53,7 +53,7 @@
                            aria-haspopup="true" aria-expanded="false"><span
                                 th:text="${session.user.name}"></span><span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/main/personal">个人中心</a></li>
+                            <li><a href="#">个人中心</a></li>
                             <li><a href="/main/article">我的文章</a></li>
                             <li><a href="/notification">我的消息<span th:if="${session.notification>0}"
                                                                   th:class="${session.notification>0?'badge newBadge':''}"

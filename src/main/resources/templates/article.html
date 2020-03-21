@@ -37,7 +37,7 @@
     </div>
     <div class="col-lg-3 col-md-3 col-sm-3 hidden-xs">
         <div class="list-group ">
-            <a href="/main/personal" th:class="${selection=='personal'?'active list-group-item':'list-group-item'} ">个人中心</a>
+            <a href="#" th:class="${selection=='personal'?'active list-group-item':'list-group-item'} ">个人中心</a>
             <a href="/main/article" th:class="${selection=='article'?'active list-group-item':'list-group-item'} ">我的文章</a>
             <a href="/main/notification" th:class="${selection=='notification'?'active list-group-item':'list-group-item'} ">我的消息<span class="badge" th:text="${session.notification}"></span></a>
         </div>
