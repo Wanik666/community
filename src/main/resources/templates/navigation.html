@@ -5,10 +5,9 @@
     <!--顶部导航栏-->
 
 
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-
-            <div class="navbar-header">
+    <nav class="navbar navbar-default ">
+        <div class="container-fluid ">
+            <div class=" navbar-header ">
                 <button class="navbar-toggle collapsed" type="button" data-toggle="collapse"
                         data-target="#bs-example-navbar-collapse-1" aria-controls="bs-navbar" aria-expanded="false">
                     <span class="sr-only">个人博客</span>
@@ -20,32 +19,36 @@
             </div>
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <form class="navbar-form navbar-left" th:action="@{${#httpServletRequest.getContextPath()}}"
-                      method="get">
-                    <div class="form-group">
-                        <input type="text" class="form-control" name="search" th:value="${search}"
-                               placeholder="请搜索问题">
-                    </div>
-                    <button type="submit" class="btn btn-default">搜索</button>
-                </form>
-                <ul class="nav navbar-nav navbar-right" th:if="${session.user==null}">
-                    <li>
-                        <a href="/login">登录</a>
-                    </li>
-                </ul>
 
-                <ul class="nav navbar-nav navbar-right" th:if="${session.user!=null}">
-                    <li>
+
+            <form class="navbar-form navbar-left" th:action="@{${#httpServletRequest.getContextPath()}}"
+                  method="get">
+                <div class="form-group form-relative" >
+                    <input type="text" class="form-control" name="search" th:value="${search}"
+                           placeholder="请搜索问题">
+                    <button type="submit" class="btn btn-search btn-default">搜索</button>
+                </div>
+
+            </form>
+
+
+            <ul class="nav navbar-nav navbar-right" th:if="${session.user==null}">
+                <li >
+                    <a href="/login">登录</a>
+                </li>
+            </ul>
+
+                <ul class="nav navbar-nav navbar-right hidden-xs" th:if="${session.user!=null}">
+                    <li class="li-inline-block">
                         <a href="/publish"><i class="iconfont icon-fabu2"></i>&nbsp;&nbsp;写文章</a>
                     </li>
-                    <li>
+                    <li class="li-inline-block">
                         <a href="/notification">
-                            <i class="glyphicon glyphicon-envelope"></i>
+                            <i class="glyphicon glyphicon-envelope"> </i>
                             <span th:class="${session.notification>0?'notification-yellow-point':''}"></span>
                         </a>
                     </li>
-
-                    <li class="dropdown">
+                    <li class="dropdown ">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                            aria-haspopup="true" aria-expanded="false"><span
                                 th:text="${session.user.name}"></span><span class="caret"></span></a>
@@ -60,7 +63,26 @@
                         </ul>
                     </li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right visible-xs" th:if="${session.user!=null}">
+                    <li class="li-inline-block">
+                        <a href="/publish"><i class="iconfont icon-fabu2"></i>&nbsp;&nbsp;发布文章</a>
+                    </li>
+                    <li class="li-inline-block">
+                        <a href="/notification">
+                            <i class="glyphicon glyphicon-envelope"> </i>
+                            <span th:class="${session.notification>0?'notification-yellow-point':''}"></span>
+                            &nbsp;&nbsp;最新消息
+                        </a>
+                    </li>
+                    <li class="li-inline-block">
+                        <a href="/main/article">
+                            <i class="iconfont icon-liebiao"> </i>
+                            &nbsp;我的文章
+                        </a>
+                    </li>
+                </ul>
             </div>
+
         </div>
     </nav>
 

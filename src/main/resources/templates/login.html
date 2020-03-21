@@ -8,18 +8,31 @@
 
 </head>
 <body>
-<div class="panel panel-login">
-    <div class="login-form">
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-3 col-xs-2">
 
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-8 panel panel-login ">
+            <div class="login-form col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            </div>
+            <div class="login-other col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h5>第三方账号登录</h5>
+                <a th:href="@{https://github.com/login/oauth/authorize(client_id=${#httpServletRequest.getServletContext().getAttribute('clientId')},redirect_uri=${#httpServletRequest.getServletContext().getAttribute('redirectUri')},scope='user',state=1)}"
+                   class="btn btn-primary  btn-github" onclick="doLogin()" role="button">
+                    <i class="iconfont icon-GitHub"> </i>
+                    GitHub 登录
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-3 col-xs-2">
+
+        </div>
     </div>
-    <div class="login-other">
-        <h5>第三方账号登录</h5>
-        <a th:href="@{https://github.com/login/oauth/authorize(client_id=${#httpServletRequest.getServletContext().getAttribute('clientId')},redirect_uri=${#httpServletRequest.getServletContext().getAttribute('redirectUri')},scope='user',state=1)}"  class="btn btn-primary btn-block btn-github" onclick="doLogin()" role="button">
-            <i class="iconfont icon-GitHub">  </i>
-            GitHub 登录
-        </a>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <head th:insert="~{footer :: foot}"></head>
     </div>
 </div>
-<head th:insert="~{footer :: foot}"></head>
 </body>
 </html>

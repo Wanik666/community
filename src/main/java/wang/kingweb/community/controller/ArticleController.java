@@ -4,14 +4,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import wang.kingweb.community.dto.ArticleDTO;
 import wang.kingweb.community.dto.CommentDTO;
+import wang.kingweb.community.dto.RespDTO;
 import wang.kingweb.community.enums.CommentType;
 import wang.kingweb.community.enums.CustomizeErrorCode;
 import wang.kingweb.community.exception.CustomizeException;
+import wang.kingweb.community.mapper.TagMapper;
 import wang.kingweb.community.model.Article;
+import wang.kingweb.community.model.Tag;
+import wang.kingweb.community.model.TagExample;
 import wang.kingweb.community.model.User;
 import wang.kingweb.community.service.ArticleService;
 import wang.kingweb.community.service.CommentService;
@@ -19,9 +22,12 @@ import wang.kingweb.community.service.CommentService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
+@RequestMapping("/article")
 public class ArticleController {
 
     @Autowired
@@ -29,9 +35,11 @@ public class ArticleController {
 
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private TagMapper tagMapper;
 
 
-    @GetMapping("/article/detail/{id}")
+    @GetMapping("/detail/{id}")
     public String articleDetails(@PathVariable(name = "id") long id,
                                  Model model,HttpServletRequest request){
         ArticleDTO article = articleService.selectArticleById(id);
@@ -62,9 +70,8 @@ public class ArticleController {
         return "articleDetail";
     }
 
-    @GetMapping("/article/{operate}")
-    public String editOrDelArticle(@PathVariable(name = "operate") String operate,
-                                   Long id, Model model, HttpServletRequest request){
+    @GetMapping("/edit")
+    public String editArticle(@RequestParam("id") Long id, Model model, HttpServletRequest request){
         //检查用户是否登录
         User user = (User) request.getSession().getAttribute("user");
         if(user==null){
@@ -77,16 +84,24 @@ public class ArticleController {
             log.error(String.format("没有找到id: %d 的文章",id));
             throw new CustomizeException(CustomizeErrorCode.FILE_NOT_FOUND);
         }
-        switch (operate){
-            case "edit":
-                model.addAttribute("article",article);
-                return "publish";
-            case "delete":
-                //删除文章信息
-                 articleService.deleteArticleById(id);
 
-                return "redirect:/main/article";
+        List<Tag> tags = tagMapper.selectByExample(new TagExample());
+
+        Map<String, List<Tag>> tagCollect = tags.stream().collect(Collectors.groupingBy(Tag::getTagType));
+
+        model.addAttribute("tags",tagCollect);
+        model.addAttribute("article",article);
+        return "publish";
+    }
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public RespDTO delArticle(@RequestParam("id") Long id){
+        int result = articleService.deleteArticleById(id);
+        if(result==1){
+
+            return RespDTO.ok("删除成功！");
+        }else{
+            return RespDTO.error("删除失败！");
         }
-        return "redirect:/";
     }
 }

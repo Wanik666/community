@@ -1,5 +1,11 @@
 ### 个人博客
 
+两款提示框
+
+[sweetalert](https://sweetalert.js.org/)
+
+[toastr](https://codeseven.github.io/toastr/)
+
 #### 2020-0320 v2.9
 个人博客系统上线
 [我的博客](http://117.50.105.238)
@@ -10,6 +16,9 @@
 
 优化tag标签,使用第三方显示插件 
 [markdown](https://github.com/pandao/editor.md)
+
+另一款markdown
+[stackedit](https://benweet.github.io/stackedit.js/)
 ##### 2020-03-15 v2.7
     增加阅读数、对文章进行评论、对评论进行评论等功能，稍后完善点赞数
 

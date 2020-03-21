@@ -4,7 +4,11 @@ function postComment() {
     var content = $("#commentArea").val();
     var data = {"parentId":parentId,"content":content,"type":1};
     if(content==undefined||content==""){
-        alert("评论内容不能为空");
+        swal("评论内容不能为空",{
+            icon:"success",
+            buttons: false,
+            timer: 1500,
+        })
         return;
     }
     $.ajax({
@@ -16,10 +20,19 @@ function postComment() {
         success:function (result) {
             if(result.code==200){
                 //$("#commentArea").val("");
-                window.location.reload();
-                alert(result.message);
+                swal(result.message,{
+                    icon:"success",
+                    buttons: false,
+                    timer: 1500,
+                }).then(function () {
+                    window.location.reload();
+                })
             }else {
-                alert(result.message)
+                swal(result.message,{
+                    icon:"error",
+                    buttons: false,
+                    timer: 1000,
+                })
             }
         }
     });
@@ -53,7 +66,6 @@ function showChildComment(ele) {
             success:function (result) {
                 var obj = result.obj;
                 $.each(obj,function (i, o) {
-                    console.log(o.createTime);
                     var time = new Date(o.createTime).format("yyyy-MM-dd");
                     pushCommentHtml(parentId,o.user.avatarUrl,o.user.name,o.content,time);
                 });
@@ -71,6 +83,7 @@ function subComment(ele) {
     var parentId = $(ele).attr("data-parentId");
     var subcomment = $("#childComment-"+parentId).val();
     if(subcomment==undefined||subcomment==null||subcomment==""){
+
         alert("评论内容不能为空");
         return;
     }
@@ -93,9 +106,17 @@ function subComment(ele) {
                 var commentCount = $("#commentCount-"+parentId);
                 var commentCountVal  = commentCount.text();
                 commentCountVal==''?commentCount.text(1):commentCount.text(parseInt(commentCountVal)+1);
-                alert(result.message);
+                swal(result.message,{
+                    icon:"success",
+                    buttons: false,
+                    timer: 1000,
+                });
             }else {
-                alert(result.message)
+                swal(result.message,{
+                    icon:"error",
+                    buttons: false,
+                    timer: 1000,
+                });
             }
         }
     });
@@ -143,11 +164,14 @@ $(function() {
         var _length =  $(this).val().split(",").length
         if(_length>=5){
             tagInput.tagsinput("remove",item);
-            alert("已超过最大标签数");
+            swal("已超过最大标签数5",{
+                icon:"wrong",
+                buttons: false,
+                timer: 1000,
+            });
             return;
         }
 
-        console.log(item);
         $.ajax({
             url:"/tag/"+item,
             type:"get",
@@ -155,7 +179,11 @@ $(function() {
             success:function (result) {
                 if(result.code!==200){
                     tagInput.tagsinput("remove",item);
-                    alert(result.message);
+                    swal(result.message,{
+                        icon:"error",
+                        buttons: false,
+                        timer: 1000,
+                    });
                 }
 
             }
@@ -168,28 +196,83 @@ function addTag(e) {
     tagInput.tagsinput("add",tag+",");
 }
 
+function del(url) {
+    swal({
+        title: "确认删除文章吗？",
+        text: "",
+        icon: "warning",
+        buttons: ["取消","删除"],
+        dangerMode: true,
+    }).then(function () {
+        $.ajax({
+            url:url,
+            type:"delete",
+            success:function (result) {
+                if(result.code==200){
+                    swal(result.message, {
+                        icon: "success",
+                        buttons: false,
+                        timer: 1500,
+                    }).then(function () {
+                        window.location.reload();
+                        //window.location.replace("/main/article");
+                    })
+
+                }else{
+                    swal(result.message,{
+                        icon:"error",
+                        buttons: false,
+                        timer: 1500,
+                    });
+                }
+            }
+        })
+    })
+}
+
 
 function publish() {
-    var data =  JSON.stringify($("#publishForm").serializeObject());
-    //console.log(JSON.parse(data));
-
-    //var data = $("#publishForm").serialize();
-    console.log(data);
-    $.ajax({
-        url:"/publish",
-        type:"POST",
-        data:data,
-        dataType:"json",
-        contentType:"application/json",
-        success:function (result) {
-            console.log(result.message);
-            if(result.code==200){
-                window.location.replace("/");
-            }
-
-        }
+    swal({
+        title: "确认发布文章吗？",
+        text: "",
+        icon: "warning",
+        buttons: ["取消","发布"],
+        dangerMode: true,
     })
+        .then((willDelete) => {
+            if (willDelete) {
+                var data =  JSON.stringify($("#publishForm").serializeObject());
+                $.ajax({
+                    url:"/publish",
+                    type:"POST",
+                    data:data,
+                    dataType:"json",
+                    contentType:"application/json",
+                    success:function (result) {
+                        console.log(result.message);
+                        if(result.code==200){
+                            swal(result.message, {
+                                icon: "success",
+                                buttons: false,
+                                timer: 1500,
+                            }).then(function () {
+                                window.location.replace("/");
+                            })
 
+                        }else{
+                            swal(result.message,{
+                                icon:"error",
+                                buttons: false,
+                                timer: 1500,
+                            });
+                        }
+
+                    }
+                })
+
+            } else {
+            }
+        });
 
 }
 

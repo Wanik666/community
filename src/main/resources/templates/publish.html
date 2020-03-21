@@ -22,6 +22,7 @@
             imageUpload    : true,
             imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
             imageUploadURL : "/img/upload",
+            autoFocus:false,
             toolbarIcons : function() {  //自定义工具栏，后面有详细介绍
                 return [
                     "undo", "redo", "|",
@@ -54,15 +55,7 @@
 <div class="row main">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="row">
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"><h4><i class="iconfont icon-fabu"></i>&nbsp;发起</h4></div>
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-9 alertMsg">
-                <div class="alert alert-danger alert-dismissible alert-error" role="alert" th:if="${error != null}">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <span th:text="${error}"></span>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-3"></div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><h4><i class="iconfont icon-fabu"></i>&nbsp;发起</h4></div>
         </div>
 
 
@@ -74,7 +67,7 @@
             <div class="form-group">
                 <label for="title">文章标题:</label>
                 <input type="text" class="form-control" th:value="${article.title}" id="title" name="title"
-                       placeholder="填写标题......">
+                       placeholder="填写标题......" autocomplete="off">
             </div>
             <div class="form-group">
                 <label for="description">文章内容(请参考右侧提示填写):</label>
@@ -100,11 +93,13 @@
 
                 <div class="tab-content">
                     <div role="tabpanel" th:id="${tagMap.key}" th:each="tagMap,index:${tags}"
-                         th:class="${index.first ? 'active tab-pane':'tab-pane'}">
-                        <span class="label label-info tags" th:each="tag :${tagMap.value}">
-                            <span class="glyphicon glyphicon-tags"> </span>
-                            <span th:text="${tag.getTagName()}" onclick="addTag(this)"></span>
-                     </span>
+                         th:class="${index.first ? 'active tab-pane ':'tab-pane '}">
+                        <div class="tab-tags-inline-block">
+                            <span class="label label-info tags " th:each="tag :${tagMap.value}">
+                                <span class="glyphicon glyphicon-tags"> </span>
+                                <span th:text="${tag.getTagName()}" onclick="addTag(this)"></span>
+                            </span>
+                        </div>
                     </div>
                 </div>
 

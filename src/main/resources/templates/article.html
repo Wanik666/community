@@ -10,7 +10,7 @@
 <div th:replace="navigation :: nav"></div>
 
 <div class="row main">
-    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 col-left">
+    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 col-left">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><h4><i class="iconfont icon-liebiao"></i>&nbsp;我的文章</h4></div>
         </div>
@@ -25,7 +25,8 @@
                 <span th:text="${article.answerCount}"></span> 个回复 • <span th:text="${article.readCount}"></span> 次浏览 • 发布时间<span th:text="${#dates.format(article.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
                 <div class="link-items">
                     <a th:href="@{/article/edit(id=${article.getId()})}">编辑</a>
-                    <a th:href="@{/article/delete(id=${article.getId()})}">删除</a>
+
+                    <a href="#" th:onclick="del([['/article/delete?id='+${article.getId()}]]);">删除</a>
                 </div>
             </div>
 
@@ -34,8 +35,8 @@
         <!-- 分页 -->
         <div th:replace="pagination :: page"></div>
     </div>
-    <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-        <div class="list-group">
+    <div class="col-lg-3 col-md-3 col-sm-3 hidden-xs">
+        <div class="list-group ">
             <a href="/main/personal" th:class="${selection=='personal'?'active list-group-item':'list-group-item'} ">个人中心</a>
             <a href="/main/article" th:class="${selection=='article'?'active list-group-item':'list-group-item'} ">我的文章</a>
             <a href="/main/notification" th:class="${selection=='notification'?'active list-group-item':'list-group-item'} ">我的消息<span class="badge" th:text="${session.notification}"></span></a>

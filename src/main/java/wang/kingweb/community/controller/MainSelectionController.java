@@ -61,10 +61,18 @@ public class MainSelectionController {
                 model.addAttribute("selection",selection);
                 return "article";
             case "personal":
-                return "personal";
-            case "notification":
+                if(StringUtils.isBlank(search)){
 
-                return "redirect:/notification";
+                    return "personal";
+                }else {
+                    return "redirect:/?search="+search;
+                }
+            case "notification":
+                if(StringUtils.isBlank(search)){
+                    return "redirect:/notification";
+                }else {
+                    return "redirect:/?search="+search;
+                }
             default:
                 return "redirect:/";
         }

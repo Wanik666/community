@@ -1,5 +1,6 @@
 package wang.kingweb.community.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ArticleService {
 
@@ -33,10 +35,9 @@ public class ArticleService {
     }
 
     @Transactional
-    public void deleteArticleById(Long id) {
+    public int deleteArticleById(Long id) {
         //找到该文章的一级评论，然后根据一级评论去找二级评论，先删除二级评论，然后删除一级评论
-        //删除文章
-        articleMapper.deleteByPrimaryKey(id);
+        log.info(String.format("准备删除id为%d的文章",id));
         //查找一级评论
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria().andTypeEqualTo(CommentType.ARTICLE.getType()).andParentIdEqualTo(id);
@@ -48,11 +49,16 @@ public class ArticleService {
             CommentExample example = new CommentExample();
             example.createCriteria().andParentIdIn(firstCommentId).andTypeEqualTo(CommentType.COMMENT.getType());
             commentMapper.deleteByExample(example);
+            log.info(String.format("删除文章id：%d 二级级评论"+id));
             //删除一级评论
             CommentExample firstComment = new CommentExample();
             firstComment.createCriteria().andIdIn(firstCommentId);
-            commentMapper.deleteByExample(firstComment);
+             commentMapper.deleteByExample(firstComment);
+             log.info(String.format("删除文章id：%d 一级评论"+id));
         }
+        //删除文章
+        log.info(String.format("删除文章id：%d"+id));
+        return articleMapper.deleteByPrimaryKey(id);
 
     }
 

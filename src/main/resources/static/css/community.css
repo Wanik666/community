@@ -32,6 +32,10 @@ a:hover{
     padding-top: 4px;
 }
 
+.tab-tags-inline-block{
+    display: inline-block !important;
+}
+
 .btn-publish {
     float: right;
 }
@@ -231,4 +235,24 @@ a:hover{
 .footer{
     text-align: center;
     padding: 10px 15px;
+}
+
+.form-relative{
+    position: relative;
+}
+
+.btn-search{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.navbar-form{
+    border-top: none;
+}
+
+
+.li-inline-block{
+    display: inline-block !important;
+    margin-left: 10px;
+    /*position: absolute !important;*/
 }

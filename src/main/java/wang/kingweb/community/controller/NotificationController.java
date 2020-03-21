@@ -1,5 +1,6 @@
 package wang.kingweb.community.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,21 +41,26 @@ public class NotificationController {
     @GetMapping("/notification")
     public String getNotifications(Model model, HttpServletRequest request,
                                    @RequestParam(value = "page",defaultValue = "1") Long page,
-                                   @RequestParam(value = "size",defaultValue = "5") Long size){
+                                   @RequestParam(value = "size",defaultValue = "5") Long size,
+                                   @RequestParam(value = "search",required = false) String search){
         User user = (User) request.getSession().getAttribute("user");
         if(user==null){
             throw new CustomizeException(CustomizeErrorCode.NOT_LOGIN);
         }
-        //查询所有消息
-        NotificationExample notificationExample = new NotificationExample();
-        notificationExample.createCriteria().andReceiverIdEqualTo(user.getId());
-        long totalCount = notificationMapper.countByExample(notificationExample);
-        PaginationDTO paginationDTO =  paginationService.getPageInfo(page,size,totalCount);
-        List<NotificationDTO> notificationDTOList = notificationService.selectNotifications(user.getId(),paginationDTO.getOffset(),size);
-        model.addAttribute("paginationInfo",paginationDTO);
-        model.addAttribute("selection","notification");
-        model.addAttribute("notifications",notificationDTOList);
-        return "notification";
+        if(StringUtils.isBlank(search)){
+            //查询所有消息
+            NotificationExample notificationExample = new NotificationExample();
+            notificationExample.createCriteria().andReceiverIdEqualTo(user.getId());
+            long totalCount = notificationMapper.countByExample(notificationExample);
+            PaginationDTO paginationDTO =  paginationService.getPageInfo(page,size,totalCount);
+            List<NotificationDTO> notificationDTOList = notificationService.selectNotifications(user.getId(),paginationDTO.getOffset(),size);
+            model.addAttribute("paginationInfo",paginationDTO);
+            model.addAttribute("selection","notification");
+            model.addAttribute("notifications",notificationDTOList);
+            return "notification";
+        }else {
+            return "redirect:/?search="+search;
+        }
     }
 
     @GetMapping("/notification/read/{nid}/{aid}")

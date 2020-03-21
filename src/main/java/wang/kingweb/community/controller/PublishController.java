@@ -28,21 +28,24 @@ public class PublishController {
     TagMapper tagMapper;
 
     @GetMapping("/publish")
-    public String publish(HttpServletRequest request,Model model){
+    public String publish(@RequestParam(value = "search",required = false) String search, HttpServletRequest request,Model model){
 
         //检查用户是否登录
         User user = (User) request.getSession().getAttribute("user");
         if(user==null){
             return "redirect:/";
         }
-        List<Tag> tags = tagMapper.selectByExample(new TagExample());
+        if(StringUtils.isBlank(search)){
+            List<Tag> tags = tagMapper.selectByExample(new TagExample());
 
-        Map<String, List<Tag>> tagCollect = tags.stream().collect(Collectors.groupingBy(Tag::getTagType));
+            Map<String, List<Tag>> tagCollect = tags.stream().collect(Collectors.groupingBy(Tag::getTagType));
 
-        System.out.println("分组："+ JSON.toJSONString(tagCollect));
-        model.addAttribute("tags",tagCollect);
-        model.addAttribute("article",new Article());
-        return "publish";
+            model.addAttribute("tags",tagCollect);
+            model.addAttribute("article",new Article());
+            return "publish";
+        }
+        return "redirect:/?search="+search;
+
 
     }
 
@@ -54,30 +57,19 @@ public class PublishController {
         //检查用户是否登录
         User user = (User) request.getSession().getAttribute("user");
         if(user==null){
-            model.addAttribute("error","暂未登录，请登录后重试！");
             return RespDTO.error("暂未登录，请登录后重试！");
         }
 
-        //用于数据回显
-        /*Article articleShow = new Article();
-
-        articleShow.setId(id);
-        articleShow.setTitle(title);
-        articleShow.setDescription(description);
-        articleShow.setTag(tag);*/
         model.addAttribute("article",article);
 
         //检测数据是否为空
         if(StringUtils.isBlank(article.getTitle())){
-            model.addAttribute("error","请填写标题后提交！");
             return RespDTO.error("请填写标题后提交！");
         }
         if(StringUtils.isBlank(article.getDescription())){
-            model.addAttribute("error","请填写内容后提交！");
             return RespDTO.error("请填写内容后提交！");
         }
         if(StringUtils.isBlank(article.getTag())){
-            model.addAttribute("error","请填写标签后提交！");
             return RespDTO.error("请填写标签后提交！");
         }
         //添加文章（问题）信息到数据库
@@ -95,7 +87,6 @@ public class PublishController {
         }
         if(result!=1){
             //更新失败
-            model.addAttribute("error","发布失败，请稍后提交！");
             return RespDTO.error("服务器忙~~");
         }
 
