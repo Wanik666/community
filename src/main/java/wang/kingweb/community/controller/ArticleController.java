@@ -1,6 +1,7 @@
 package wang.kingweb.community.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,8 +41,13 @@ public class ArticleController {
 
 
     @GetMapping("/detail/{id}")
-    public String articleDetails(@PathVariable(name = "id") long id,
+    public String articleDetails(@RequestParam(value = "search",required = false) String search,
+                                 @PathVariable(name = "id") long id,
                                  Model model,HttpServletRequest request){
+        if(StringUtils.isNotBlank(search)){
+            return "redirect:/?search="+search;
+        }
+
         ArticleDTO article = articleService.selectArticleById(id);
         //没有找到对应的文章信息，将异常抛出
         if(article==null){
@@ -71,13 +77,18 @@ public class ArticleController {
     }
 
     @GetMapping("/edit")
-    public String editArticle(@RequestParam("id") Long id, Model model, HttpServletRequest request){
+    public String editArticle(@RequestParam(value = "search",required = false) String search,
+                              @RequestParam("id") Long id, Model model, HttpServletRequest request){
+        if(StringUtils.isNotBlank(search)){
+            return "redirect:/?search="+search;
+        }
         //检查用户是否登录
         User user = (User) request.getSession().getAttribute("user");
         if(user==null){
             model.addAttribute("error","暂未登录，请登录后重试！");
             return "redirect:/";
         }
+
         ArticleDTO article = articleService.selectArticleById(id);
         //没有找到对应的文章信息，将异常抛出
         if(article==null){

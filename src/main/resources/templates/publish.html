@@ -19,6 +19,8 @@
             height: "400px",
             path: "/markdown/lib/",
             placeholder:"",
+            codeFold : true,
+            saveHTMLToTextarea : true,
             imageUpload    : true,
             imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
             imageUploadURL : "/img/upload",
@@ -33,19 +35,23 @@
                     "help"
                 ]; // full, simple, mini
             },
+            //进入全屏页面修改
             onfullscreen:function () {
                 CodeMirror_height = $(".CodeMirror-gutters").css("height");
                 $(".CodeMirror-gutters").css("height","100%");
                 $("#tagDiv").css("display","none");
                 //隐藏标签栏
             },
+            //退出全屏页面恢复
             onfullscreenExit:function () {
                 //显示标签栏
                 //CodeMirror-gutters
                 $(".CodeMirror-gutters").css("height","100%");
                 $("#tagDiv").css("display","block");
         }
-
+        });
+        editormd.loadPlugin("/markdown/plugins/image-handle-paste/image-handle-paste", function(){
+            editor.imagePaste();
         });
     });
 </script>

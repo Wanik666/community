@@ -4,11 +4,12 @@ function postComment() {
     var content = $("#commentArea").val();
     var data = {"parentId":parentId,"content":content,"type":1};
     if(content==undefined||content==""){
-        swal("评论内容不能为空",{
-            icon:"success",
+        /*swal("评论内容不能为空",{
+            icon:"warning",
             buttons: false,
             timer: 1500,
-        })
+        })*/
+        toastr.warning("评论内容不能为空");
         return;
     }
     $.ajax({
@@ -20,19 +21,26 @@ function postComment() {
         success:function (result) {
             if(result.code==200){
                 //$("#commentArea").val("");
-                swal(result.message,{
+                /*swal(result.message,{
                     icon:"success",
                     buttons: false,
                     timer: 1500,
                 }).then(function () {
                     window.location.reload();
-                })
+                })*/
+                toastr.success(result.message,"",{
+                    onHidden:function () {
+                        window.location.reload();
+                    }
+                });
             }else {
-                swal(result.message,{
+                /*swal(result.message,{
                     icon:"error",
                     buttons: false,
                     timer: 1000,
-                })
+                })*/
+                toastr.error(result.message);
+
             }
         }
     });
@@ -84,7 +92,7 @@ function subComment(ele) {
     var subcomment = $("#childComment-"+parentId).val();
     if(subcomment==undefined||subcomment==null||subcomment==""){
 
-        alert("评论内容不能为空");
+        toastr.warning("评论内容不能为空");
         return;
     }
 
@@ -106,17 +114,19 @@ function subComment(ele) {
                 var commentCount = $("#commentCount-"+parentId);
                 var commentCountVal  = commentCount.text();
                 commentCountVal==''?commentCount.text(1):commentCount.text(parseInt(commentCountVal)+1);
-                swal(result.message,{
+                toastr.success(result.message);
+                /*swal(result.message,{
                     icon:"success",
                     buttons: false,
                     timer: 1000,
-                });
+                });*/
             }else {
-                swal(result.message,{
+                /*swal(result.message,{
                     icon:"error",
                     buttons: false,
                     timer: 1000,
-                });
+                });*/
+                toastr.error(result.message);
             }
         }
     });
@@ -157,6 +167,24 @@ function like(ele){
 var tagInput = undefined;
 
 $(function() {
+    toastr.options = {
+        closeButton: false,
+        debug: false,
+        progressBar: false,
+        positionClass: "toast-center-center",
+        onclick: null,
+        showDuration: "300",
+        hideDuration: "1000",
+        timeOut: "1500",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut"
+    };
+
+
+
     tagInput = $("input[data-role=tagsinput]");
 
     tagInput.on('itemAdded',function (event) {
@@ -164,11 +192,12 @@ $(function() {
         var _length =  $(this).val().split(",").length
         if(_length>=5){
             tagInput.tagsinput("remove",item);
-            swal("已超过最大标签数5",{
-                icon:"wrong",
+            /*swal("已超过最大标签数5", {
+                icon: "warning",
                 buttons: false,
                 timer: 1000,
-            });
+            });*/
+            toastr.warning("已超过最大标签数5");
             return;
         }
 
@@ -179,11 +208,12 @@ $(function() {
             success:function (result) {
                 if(result.code!==200){
                     tagInput.tagsinput("remove",item);
-                    swal(result.message,{
+                    toastr.error(result.message);
+                    /*swal(result.message,{
                         icon:"error",
                         buttons: false,
                         timer: 1000,
-                    });
+                    });*/
                 }
 
             }
@@ -232,6 +262,17 @@ function del(url) {
 
 
 function publish() {
+    var data =  $("#publishForm").serializeObject();
+    if(data.title===""||data.title==null){
+        toastr.warning("文章标题不能为空~~")
+        return;
+    }if(data.description===""||data.description==null){
+        toastr.warning("文章内容不能为空~~")
+        return;
+    }if(data.tag===""||data.tag==null){
+        toastr.warning("标签不能为空~~")
+        return;
+    }
     swal({
         title: "确认发布文章吗？",
         text: "",
@@ -241,30 +282,36 @@ function publish() {
     })
         .then((willDelete) => {
             if (willDelete) {
-                var data =  JSON.stringify($("#publishForm").serializeObject());
+
                 $.ajax({
                     url:"/publish",
                     type:"POST",
-                    data:data,
+                    data:JSON.stringify(data),
                     dataType:"json",
                     contentType:"application/json",
                     success:function (result) {
-                        console.log(result.message);
+
                         if(result.code==200){
-                            swal(result.message, {
+                            /*swal(result.message, {
                                 icon: "success",
                                 buttons: false,
                                 timer: 1500,
                             }).then(function () {
                                 window.location.replace("/");
-                            })
+                            })*/
+                            toastr.success(result.message,"",{
+                                onHidden:function () {
+                                    window.location.replace("/");
+                                }
+                            });
 
                         }else{
-                            swal(result.message,{
+                            toastr.error(result.message)
+                            /*swal(result.message,{
                                 icon:"error",
                                 buttons: false,
                                 timer: 1500,
-                            });
+                            });*/
                         }
 
                     }
